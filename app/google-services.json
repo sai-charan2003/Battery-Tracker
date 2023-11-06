@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "276420538600",
+    "project_id": "battery-tracker-9ed87",
+    "storage_bucket": "battery-tracker-9ed87.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:276420538600:android:c6e2e8420222c8cc83595d",
+        "android_client_info": {
+          "package_name": "com.example.battery_widget"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuoWLv5sWGHJFGpnOJ5Rvx1qBM_v44kWE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
