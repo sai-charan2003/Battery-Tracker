@@ -18,6 +18,7 @@ class viewmodel(application: Context):ViewModel() {
 
 
 
+
     var batterylevel by
     mutableStateOf(0)
 

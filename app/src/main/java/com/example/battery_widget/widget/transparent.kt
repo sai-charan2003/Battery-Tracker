@@ -8,11 +8,16 @@ import android.bluetooth.BluetoothHeadset
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.ACTION_BATTERY_CHANGED
 import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.BatteryManager
 import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
@@ -32,10 +37,8 @@ import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.LinearProgressIndicator
 import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.action.actionRunCallback
-import androidx.glance.appwidget.action.actionSendBroadcast
 import androidx.glance.appwidget.provideContent
 import androidx.glance.appwidget.state.updateAppWidgetState
-import androidx.glance.background
 import androidx.glance.currentState
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Column
@@ -54,7 +57,8 @@ import androidx.glance.unit.ColorProvider
 import com.example.battery_widget.R
 
 
-object CounterWidget: GlanceAppWidget() {
+
+object transparent: GlanceAppWidget() {
 
 
 
@@ -75,29 +79,31 @@ object CounterWidget: GlanceAppWidget() {
 
         provideContent{
             GlanceTheme {
+                val sharedPreferences:SharedPreferences=context.getSharedPreferences("Devicename",Context.MODE_PRIVATE)
+                val sharedPreferencesheadphones:SharedPreferences=context.getSharedPreferences("headphonesnames",Context.MODE_PRIVATE)
+                val editor=sharedPreferences.edit()
+                val editorearphones=sharedPreferencesheadphones.edit()
+                editor.putString("Devicename",android.os.Build.MODEL)
+
+                val devicename by remember {
+                    mutableStateOf(sharedPreferences.getString("Devicename",android.os.Build.MODEL))
+                }
 
 
-
-
-
-
-
-
-                Log.d("TAG", "provideGlance: updated")
 
                 var headphonebattery= currentState(key = headphonebattery)?:0
                 var ischarging= currentState(key= ischarging)
                 var bluecount= currentState(key= bluecount)?:0
                 var realheadphonebattery= currentState(key= realheadphonebattery)?:0
                 var headphonename= currentState(key=headphonename)
+
                 bluecount=0
 
 
                 val batteryIntent =
                     context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
                 val chargingstatus=batteryIntent!!.getIntExtra(BatteryManager.EXTRA_STATUS,0)
-                Log.d("TAG", "provideGlance: $chargingstatus")
-                Log.d("TAG", "provideGlance: ${ischargingfun(chargingstatus)}")
+
 
 
                 val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
@@ -113,6 +119,7 @@ object CounterWidget: GlanceAppWidget() {
                         }?:-1
                         if(headphonebattery!=-1){
                             headphonename=it.name
+
                             bluecount= bluecount+1
                             realheadphonebattery=headphonebattery
                         }
@@ -130,22 +137,27 @@ object CounterWidget: GlanceAppWidget() {
 
                 val batteryManager = LocalContext.current.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
                 batteryLevel = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
+                //batteryLevel=viewmodel.batterylevel
                 ischarging= ischargingfun(chargingstatus)
+                val batterylevel2 = remember {
+                    mutableStateOf(batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY))
+                }
 
                 val blutooth:BluetoothHeadset?=null
-//                context.registerReceiver(updatewidget(),
-//                    IntentFilter(Intent.ACTION_BATTERY_CHANGED)
-//                )
-                val batteryStatusIntent = Intent(ACTION_BATTERY_CHANGED)
+                context.registerReceiver(updatewidget(batteryManager,batterylevel2),
+                    IntentFilter(Intent.ACTION_BATTERY_CHANGED)
+                )
+                Log.d("TAG", "provideGlance: ${batterylevel2.value}")
 
 
-                Log.d("TAG", "provideGlance: ${Intent.ACTION_BATTERY_CHANGED}")
+
+
 
 
                 Column(
 
-                    modifier = GlanceModifier.fillMaxWidth().background(GlanceTheme.colors.surface).padding(end=8.dp, start = 8.dp).clickable(
-                        actionRunCallback(IncrementActionCallback::class.java)
+                    modifier = GlanceModifier.fillMaxWidth().padding(end=8.dp, start = 8.dp).clickable(
+                        actionRunCallback(Transparentaction::class.java)
                     ),
 
                     verticalAlignment = Alignment.Vertical.CenterVertically,
@@ -153,13 +165,17 @@ object CounterWidget: GlanceAppWidget() {
                 ) {
 
                     Row(
-                        modifier = GlanceModifier.fillMaxWidth().padding(bottom = 25.dp,),
+                        modifier = GlanceModifier.fillMaxWidth().padding(bottom = 25.dp),
 
                         ) {
-                        Text(text = android.os.Build.BRAND, style = TextStyle(
-                            color=GlanceTheme.colors.onSurface,
-                            fontWeight = FontWeight.Bold,
-                            ), modifier=GlanceModifier.padding(top = 6.dp))
+                        devicename?.let {
+                            Text(text = it, style = TextStyle(
+                                color=GlanceTheme   .colors.onSurface,
+                                fontWeight = FontWeight.Bold
+
+
+                            ),modifier = GlanceModifier.padding(top = 6.dp))
+                        }
 
 
                         Spacer(GlanceModifier.defaultWeight())
@@ -180,17 +196,14 @@ object CounterWidget: GlanceAppWidget() {
                         }
 
                         Text(
-
-
-                            text = "$batteryLevel%",
+                            text = "${batterylevel2.value}%",
                             style = TextStyle(
                                 color=GlanceTheme.colors.onSurface,
+
+
                                 fontWeight = FontWeight.Bold
 
-
-
-
-                                )
+                                ),modifier = GlanceModifier.padding(top = 5.dp)
                         )
                     }
 
@@ -204,25 +217,21 @@ object CounterWidget: GlanceAppWidget() {
                                     fontWeight = FontWeight.Bold
 
 
-
-
-
-
                                     ),
-                                modifier = GlanceModifier.padding(top = 5.dp)
+                                modifier = GlanceModifier.padding(top = 6.dp)
                             )
                             Spacer(GlanceModifier.defaultWeight())
                             Log.d("TAG", "provideGlance: ${ischargingfun(chargingstatus)}")
 
-                            if(realheadphonebattery>=21){
+                            if(realheadphonebattery>=50){
 
                                 LinearProgressIndicator(realheadphonebattery/100f, modifier = GlanceModifier.fillMaxHeight().padding(end = 15.dp, top = 12.dp).size(100.dp).height(20.dp), color = ColorProvider(Color.Green), backgroundColor = ColorProvider(Color.LightGray))
                             }
                             else if(realheadphonebattery<=50){
-                                LinearProgressIndicator(realheadphonebattery/100f, modifier = GlanceModifier.fillMaxHeight().padding(end = 15.dp, top = 12.dp).size(100.dp).height(20.dp), color = ColorProvider(Color.Yellow), backgroundColor = ColorProvider(Color.LightGray))
+                                LinearProgressIndicator(realheadphonebattery/100f, modifier = GlanceModifier.fillMaxHeight().padding(end = 15.dp, top = 12.dp).size(100.dp).height(20.dp), color = ColorProvider(Color.Green), backgroundColor = ColorProvider(Color.LightGray))
                             }
                             else if(realheadphonebattery<=20){
-                                LinearProgressIndicator(realheadphonebattery/100f, modifier = GlanceModifier.fillMaxHeight().padding(end = 15.dp, top = 12.dp).size(100.dp).height(20.dp), color = ColorProvider(Color.Red), backgroundColor = ColorProvider(Color.LightGray))
+                                LinearProgressIndicator(realheadphonebattery/100f, modifier = GlanceModifier.fillMaxHeight().padding(end = 15.dp, top = 12.dp).size(100.dp).height(20.dp), color = ColorProvider(Color.Yellow), backgroundColor = ColorProvider(Color.LightGray))
                             }
 
 
@@ -231,8 +240,6 @@ object CounterWidget: GlanceAppWidget() {
                                 style = TextStyle(
                                     color=GlanceTheme.colors.onSurface,
                                     fontWeight = FontWeight.Bold
-
-
 
 
                                     ),
@@ -255,12 +262,13 @@ object CounterWidget: GlanceAppWidget() {
 
 
 
-class SimpleCounterWidgetReceiver: GlanceAppWidgetReceiver() {
+class transparentReceiver: GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget
-        get() = CounterWidget
+        get() = transparent
 }
 
-class IncrementActionCallback: ActionCallback {
+
+class Transparentaction: ActionCallback {
 
     var headphonebattery:Int = 0
     var realheadphonebattery:Int=0
@@ -272,18 +280,33 @@ class IncrementActionCallback: ActionCallback {
         glanceId: GlanceId,
         parameters: ActionParameters
     ) {
-            updateAppWidgetState(context, glanceId) { prefs ->
-            val currentCount = prefs[CounterWidget.batterylevel]
+
+
+
+
+
+        updateAppWidgetState(context, glanceId) { prefs ->
+            val currentCount = prefs[transparent.batterylevel]
+            val ischarging=prefs[transparent.ischarging]
+
+
+
+
             if(currentCount != null) {
-                prefs[CounterWidget.batterylevel] = BatteryManager.BATTERY_PROPERTY_CAPACITY
+                prefs[transparent.batterylevel] = BatteryManager.BATTERY_PROPERTY_CAPACITY
             }
             val batteryIntent =
                 context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+
+
             val status:Int=batteryIntent!!.getIntExtra(BatteryManager.EXTRA_STATUS,0)
-            prefs[CounterWidget.ischarging]=ischargingfun(status)
+            prefs[transparent.ischarging]=ischargingfun(status)
+
             val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
             if (ActivityCompat.checkSelfPermission(context ,Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED
             ) {
+
+
                 val pariedDevice: Set<BluetoothDevice> = bluetoothAdapter.bondedDevices
                 pariedDevice.forEach{
                     headphonebattery= it?.let { bluetoothDevice ->
@@ -291,17 +314,17 @@ class IncrementActionCallback: ActionCallback {
                             .invoke(it) as Int
                     }!!
                     if(headphonebattery!=-1){
-                        prefs[CounterWidget.headphonename]=it.name
+                        prefs[transparent.headphonename]=it.name
 
                         devices += 1
                         realheadphonebattery=headphonebattery
-                        prefs[CounterWidget.realheadphonebattery]=realheadphonebattery
+                        prefs[transparent.realheadphonebattery]=realheadphonebattery
 
 
-                        Log.d("TAG", "Content: ${prefs[CounterWidget.headphonebattery]}")
+                        Log.d("TAG", "Content: ${prefs[transparent.headphonebattery]}")
                     }
                     if(devices==0){
-                        prefs[CounterWidget.realheadphonebattery]=0
+                        prefs[transparent.realheadphonebattery]=0
                     }
 
 
@@ -314,13 +337,13 @@ class IncrementActionCallback: ActionCallback {
             }
 
         }
-        CounterWidget.update(context, glanceId)
+        transparent.update(context, glanceId)
 
 
 
     }
 }
-fun ischargingfun(charging:Int):Boolean{
+fun ischargingfunfort(charging:Int):Boolean{
     Log.d("TAG", "ischargingfun: hi")
     var ischarging=false
     when(charging){
@@ -330,14 +353,16 @@ fun ischargingfun(charging:Int):Boolean{
     return ischarging
 
 }
-//class updatewidget: BroadcastReceiver(){
-//
-//    override fun onReceive(context: Context?, intent: Intent?) {
-//
-//        actionRunCallback(IncrementActionCallback::class.java)
-//    }
-//}
+class updatewidget(batteryManager: BatteryManager, batterylevel: MutableState<Int>): BroadcastReceiver(){
+    val batterylevel=batterylevel
+    val batteryManager=batteryManager
+    override fun onReceive(context: Context?, intent: Intent?) {
 
+        batterylevel.value=batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
+        Log.d("TAG", "onReceive: ${batterylevel.value}")
+
+    }
+}
 
 
 

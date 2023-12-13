@@ -20,6 +20,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
     }
 
     buildTypes {
@@ -31,6 +32,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -60,7 +62,7 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3-android:1.2.0-alpha10")
+    implementation("androidx.compose.material3:material3-android:1.2.0-alpha12")
     implementation("androidx.compose.material3:material3-window-size-class-android:1.2.0-alpha10")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("com.google.firebase:firebase-database-ktx:20.3.0")
@@ -84,13 +86,15 @@ dependencies {
     implementation ("androidx.glance:glance-material3:1.0.0")
     implementation("androidx.work:work-runtime-ktx:2.8.1")
     implementation("androidx.navigation:navigation-compose:2.7.5")
-//implementation ("androidx.compose.material:material-icons-extended:1.6.0-alpha04")
+    implementation ("androidx.compose.material:material-icons-extended:1.6.0-beta02")
+    implementation ("androidx.navigation:navigation-compose:2.7.5")
     implementation ("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
     implementation ("androidx.datastore:datastore:1.0.0")
     implementation ("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
     implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+    implementation ("com.google.accompanist:accompanist-navigation-animation:0.33.1-alpha")
 
 
 
