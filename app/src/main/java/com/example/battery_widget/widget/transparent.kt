@@ -144,10 +144,8 @@ object transparent: GlanceAppWidget() {
                 }
 
                 val blutooth:BluetoothHeadset?=null
-                context.registerReceiver(updatewidget(batteryManager,batterylevel2),
-                    IntentFilter(Intent.ACTION_BATTERY_CHANGED)
-                )
-                Log.d("TAG", "provideGlance: ${batterylevel2.value}")
+
+
 
 
 
@@ -221,7 +219,7 @@ object transparent: GlanceAppWidget() {
                                 modifier = GlanceModifier.padding(top = 6.dp)
                             )
                             Spacer(GlanceModifier.defaultWeight())
-                            Log.d("TAG", "provideGlance: ${ischargingfun(chargingstatus)}")
+
 
                             if(realheadphonebattery>=50){
 
@@ -321,7 +319,7 @@ class Transparentaction: ActionCallback {
                         prefs[transparent.realheadphonebattery]=realheadphonebattery
 
 
-                        Log.d("TAG", "Content: ${prefs[transparent.headphonebattery]}")
+
                     }
                     if(devices==0){
                         prefs[transparent.realheadphonebattery]=0
@@ -343,26 +341,7 @@ class Transparentaction: ActionCallback {
 
     }
 }
-fun ischargingfunfort(charging:Int):Boolean{
-    Log.d("TAG", "ischargingfun: hi")
-    var ischarging=false
-    when(charging){
-        BatteryManager.BATTERY_STATUS_CHARGING->ischarging=true
 
-    }
-    return ischarging
-
-}
-class updatewidget(batteryManager: BatteryManager, batterylevel: MutableState<Int>): BroadcastReceiver(){
-    val batterylevel=batterylevel
-    val batteryManager=batteryManager
-    override fun onReceive(context: Context?, intent: Intent?) {
-
-        batterylevel.value=batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
-        Log.d("TAG", "onReceive: ${batterylevel.value}")
-
-    }
-}
 
 
 

@@ -104,8 +104,7 @@ object CounterWidget: GlanceAppWidget() {
                 val batteryIntent =
                     context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
                 val chargingstatus=batteryIntent!!.getIntExtra(BatteryManager.EXTRA_STATUS,0)
-                Log.d("TAG", "provideGlance: $chargingstatus")
-                Log.d("TAG", "provideGlance: ${ischargingfun(chargingstatus)}")
+
 
 
                 val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
@@ -147,7 +146,7 @@ object CounterWidget: GlanceAppWidget() {
                 val batteryStatusIntent = Intent(ACTION_BATTERY_CHANGED)
 
 
-                Log.d("TAG", "provideGlance: ${Intent.ACTION_BATTERY_CHANGED}")
+
 
 
                 Column(
@@ -224,7 +223,7 @@ object CounterWidget: GlanceAppWidget() {
                                 modifier = GlanceModifier.padding(top = 5.dp)
                             )
                             Spacer(GlanceModifier.defaultWeight())
-                            Log.d("TAG", "provideGlance: ${ischargingfun(chargingstatus)}")
+
 
                             if(realheadphonebattery>=21){
 
@@ -310,7 +309,7 @@ class IncrementActionCallback: ActionCallback {
                         prefs[CounterWidget.realheadphonebattery]=realheadphonebattery
 
 
-                        Log.d("TAG", "Content: ${prefs[CounterWidget.headphonebattery]}")
+
                     }
                     if(devices==0){
                         prefs[CounterWidget.realheadphonebattery]=0
@@ -333,7 +332,7 @@ class IncrementActionCallback: ActionCallback {
     }
 }
 fun ischargingfun(charging:Int):Boolean{
-    Log.d("TAG", "ischargingfun: hi")
+
     var ischarging=false
     when(charging){
         BatteryManager.BATTERY_STATUS_CHARGING->ischarging=true
@@ -342,13 +341,7 @@ fun ischargingfun(charging:Int):Boolean{
     return ischarging
 
 }
-//class updatewidget: BroadcastReceiver(){
-//
-//    override fun onReceive(context: Context?, intent: Intent?) {
-//
-//        actionRunCallback(IncrementActionCallback::class.java)
-//    }
-//}
+
 
 
 

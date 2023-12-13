@@ -64,7 +64,7 @@ class viewmodel(application: Context):ViewModel() {
         val batteryStatsReceiver = object : BroadcastReceiver() {
 
             override fun onReceive(context: Context?, intent: Intent?) {
-                Log.d("TAG", "onReceive: hi")
+
                 val batteryManager = application.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
                 val batteryIntent = application.registerReceiver(
                     null,
@@ -82,7 +82,7 @@ class viewmodel(application: Context):ViewModel() {
                 temp = batteryIntent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0)
                 tempInCelsius = temp / 10.0f
                 voltage = batteryIntent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0)
-                Log.d("TAG", "onReceive: $voltage")
+
 
 
                 healthstate = gethealthdata(healthinfo)
