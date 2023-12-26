@@ -22,7 +22,5 @@ The Battery Tracker app is a utility tool designed for Android devices to provid
 
 ## Screenshots
 
-![App Screenshot](https://github.com/sai-charan2003/Battery-Tracker/assets/83913880/25be60c0-c3c1-41ce-93e6-b149c6a8891c)
-
-![App Screenshot](https://github.com/sai-charan2003/Battery-Tracker/assets/83913880/690b4ea4-fac6-4476-ba36-9d3a04aa853f)
+![App Screenshot](https://github.com/sai-charan2003/Battery-Tracker/assets/83913880/33f6e383-f3ae-4402-8737-63f788b67c2f)
 
