@@ -41,6 +41,10 @@ fun DevieInfoScreen(navHostController: NavHostController){
     activityManager.getMemoryInfo(memoryInfo)
     val totalMemory = memoryInfo.totalMem/gigabytes
     var availableMemory = memoryInfo.availMem/gigabytes
+    val stat = StatFs(Environment.getExternalStorageDirectory().path)
+    val bytesAvailable = stat.blockSize.toLong() * stat.blockCount.toLong()
+    val megAvailable = bytesAvailable / 1048576
+
 
 
     var totalSizeBytes: Long = 0
@@ -159,7 +163,7 @@ fun DevieInfoScreen(navHostController: NavHostController){
                 )
 
                 Text(
-                    text = "Total Storage",
+                    text = "Available Storage",
                     modifier = Modifier.padding(top = 30.dp, start = 10.dp),
                     fontSize = 17.sp
                 )
@@ -172,7 +176,7 @@ fun DevieInfoScreen(navHostController: NavHostController){
                 }
 
                 Text(
-                    text = total.toInt().toString()+"GB",
+                    text = availableSizeGB.toInt().toString()+"GB",
                     modifier = Modifier.padding(top = 3.dp, start = 10.dp)
                 )
 

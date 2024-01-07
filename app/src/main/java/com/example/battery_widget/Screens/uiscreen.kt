@@ -11,6 +11,9 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -36,6 +39,12 @@ fun uiscreen() {
     )
 
     viewmodel.batterydata()
+    val color by remember {
+        mutableStateOf(Color.Green)
+    }
+    val lowpowercolor by remember {
+        mutableStateOf(Color.Yellow)
+    }
     Scaffold() {
 
 
@@ -70,7 +79,20 @@ fun uiscreen() {
                             )
                     )
                 }
-                if (viewmodel.batterylevel >= 40) {
+                if(viewmodel.islowpower){
+                    LinearProgressIndicator(
+                        progress = { viewmodel.batterylevel / 100f },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                5.dp
+                            )
+                            .size(10.dp)
+                            .clip(shape = RoundedCornerShape(5.dp, 5.dp, 5.dp, 5.dp)),
+                        color = Color.Yellow,
+                    )
+                }
+                else{
                     LinearProgressIndicator(
                         progress = { viewmodel.batterylevel / 100f },
                         modifier = Modifier
@@ -81,30 +103,6 @@ fun uiscreen() {
                             .size(10.dp)
                             .clip(shape = RoundedCornerShape(5.dp, 5.dp, 5.dp, 5.dp)),
                         color = Color.Green,
-                    )
-                } else if (viewmodel.batterylevel < 40) {
-                    LinearProgressIndicator(
-                        progress = { viewmodel.batterylevel / 100f },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                5.dp
-                            )
-                            .size(10.dp)
-                            .clip(shape = RoundedCornerShape(5.dp, 5.dp, 5.dp, 5.dp)),
-                        color = Color(0xff61F767),
-                    )
-                } else {
-                    LinearProgressIndicator(
-                        progress = { viewmodel.batterylevel / 100f },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                5.dp
-                            )
-                            .size(10.dp)
-                            .clip(shape = RoundedCornerShape(5.dp, 5.dp, 5.dp, 5.dp)),
-                        color = Color.Red,
                     )
                 }
                 Text(

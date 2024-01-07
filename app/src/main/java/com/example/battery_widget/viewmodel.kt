@@ -1,17 +1,20 @@
 package com.example.battery_widget
 
+import android.app.PendingIntent.getActivity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
+import android.os.Build
+import android.os.PowerManager
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.ViewModel
-import kotlin.math.log
+
 
 class viewmodel(application: Context):ViewModel() {
     val application=application
@@ -55,6 +58,7 @@ class viewmodel(application: Context):ViewModel() {
 
     var chargecompute by
     mutableStateOf("null")
+    var islowpowermode by mutableStateOf(false)
 
 
     fun batterydata() {
@@ -64,6 +68,7 @@ class viewmodel(application: Context):ViewModel() {
         val batteryStatsReceiver = object : BroadcastReceiver() {
 
             override fun onReceive(context: Context?, intent: Intent?) {
+                val powerManager = context?.getSystemService(Context.POWER_SERVICE) as? PowerManager
 
                 val batteryManager = application.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
                 val batteryIntent = application.registerReceiver(
@@ -77,8 +82,9 @@ class viewmodel(application: Context):ViewModel() {
                 batterytype =
                     batteryIntent!!.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY).toString()
                 healthinfo = batteryIntent.getIntExtra(BatteryManager.EXTRA_HEALTH, 0)
-
-
+                if (powerManager != null) {
+                    islowpower=powerManager.isPowerSaveMode
+                }
                 temp = batteryIntent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0)
                 tempInCelsius = temp / 10.0f
                 voltage = batteryIntent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0)
@@ -148,6 +154,7 @@ class viewmodel(application: Context):ViewModel() {
         }
         return typeplug
     }
+
 
 
 

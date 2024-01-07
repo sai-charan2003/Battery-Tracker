@@ -14,6 +14,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.BatteryManager
 import android.os.Build
+import android.os.PowerManager
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,6 +58,7 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.example.battery_widget.R
+import kotlin.math.log
 
 
 object CounterWidget: GlanceAppWidget() {
@@ -70,6 +72,7 @@ object CounterWidget: GlanceAppWidget() {
     val bluecount= intPreferencesKey("count2")
     val headphonename= stringPreferencesKey("count3")
     val ischarging= booleanPreferencesKey("ischarging")
+    val islowpower= booleanPreferencesKey("islowpower")
 
 
 
@@ -86,24 +89,25 @@ object CounterWidget: GlanceAppWidget() {
                 }
 
 
-
-
-
-
-
-
-
                 var headphonebattery= currentState(key = headphonebattery)?:0
                 var ischarging= currentState(key= ischarging)
+                var islowpower= currentState(key= islowpower)
                 var bluecount= currentState(key= bluecount)?:0
                 var realheadphonebattery= currentState(key= realheadphonebattery)?:0
                 var headphonename= currentState(key=headphonename)
+
+
                 bluecount=0
 
 
                 val batteryIntent =
                     context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+                val powerManager = context?.getSystemService(Context.POWER_SERVICE) as? PowerManager
                 val chargingstatus=batteryIntent!!.getIntExtra(BatteryManager.EXTRA_STATUS,0)
+                if (powerManager != null) {
+                    islowpower=powerManager.isPowerSaveMode
+                }
+                Log.d("TAG", "provideGlance: $islowpower")
 
 
 
@@ -179,15 +183,13 @@ object CounterWidget: GlanceAppWidget() {
                         }
 
 
-                        if(batteryLevel>=50){
+                        if (powerManager != null) {
+                            if(islowpower == true){
 
-                            LinearProgressIndicator(batteryLevel/100f, modifier = GlanceModifier.fillMaxHeight().padding(end = 15.dp, top = 12.dp).size(100.dp).height(21.dp), color = ColorProvider(Color.Green), backgroundColor = ColorProvider(Color.LightGray))
-                        }
-                        else if(batteryLevel<=50){
-                            LinearProgressIndicator(batteryLevel/100f, modifier = GlanceModifier.fillMaxHeight().padding(end = 15.dp, top = 12.dp).size(100.dp).height(21.dp), color = ColorProvider(Color.Green), backgroundColor = ColorProvider(Color.LightGray))
-                        }
-                        else if(batteryLevel<=20){
-                            LinearProgressIndicator(batteryLevel/100f, modifier = GlanceModifier.fillMaxHeight().padding(end = 15.dp, top = 12.dp).size(100.dp).height(21.dp), color = ColorProvider(Color.Yellow), backgroundColor = ColorProvider(Color.LightGray))
+                                LinearProgressIndicator(batteryLevel/100f, modifier = GlanceModifier.fillMaxHeight().padding(end = 15.dp, top = 12.dp).size(100.dp).height(21.dp), color = ColorProvider(Color.Yellow), backgroundColor = ColorProvider(Color.LightGray))
+                            } else {
+                                LinearProgressIndicator(batteryLevel/100f, modifier = GlanceModifier.fillMaxHeight().padding(end = 15.dp, top = 12.dp).size(100.dp).height(21.dp), color = ColorProvider(Color.Green), backgroundColor = ColorProvider(Color.LightGray))
+                            }
                         }
 
                         Text(
@@ -291,6 +293,10 @@ class IncrementActionCallback: ActionCallback {
             val batteryIntent =
                 context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
             val status:Int=batteryIntent!!.getIntExtra(BatteryManager.EXTRA_STATUS,0)
+                val powerManager = context?.getSystemService(Context.POWER_SERVICE) as? PowerManager
+                if (powerManager != null) {
+                    prefs[CounterWidget.islowpower]=powerManager.isPowerSaveMode
+                }
             prefs[CounterWidget.ischarging]=ischargingfun(status)
             val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
             if (ActivityCompat.checkSelfPermission(context ,Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED

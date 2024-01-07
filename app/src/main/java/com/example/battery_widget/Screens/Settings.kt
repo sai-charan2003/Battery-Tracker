@@ -129,7 +129,7 @@ fun Settings(navHostController: NavHostController) {
                 version = list[2].toString()
                 downloadlink = list[0].toString()
 
-                val appversion = "4.0"
+                val appversion = "4.1"
                 if (appversion != version) {
                     newversion = true
 
@@ -378,6 +378,11 @@ fun Settings(navHostController: NavHostController) {
     if (whatsnewbottomsheet) {
         ModalBottomSheet(onDismissRequest = { whatsnewbottomsheet = false }) {
             Column(modifier = Modifier.padding(start = 10.dp, bottom = 10.dp)) {
+                Text(
+                    text = "📱 Now battery progress indicator will turn yellow when low power mode is on",
+                    modifier = Modifier.padding(bottom = 10.dp),
+                    color = Color.Green
+                )
 
                 Text(
                     text = "📱 New UI with bottom navigation bar",

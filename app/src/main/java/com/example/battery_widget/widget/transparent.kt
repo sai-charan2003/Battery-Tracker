@@ -12,6 +12,7 @@ import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.BatteryManager
+import android.os.PowerManager
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -69,6 +70,7 @@ object transparent: GlanceAppWidget() {
     val bluecount= intPreferencesKey("count2")
     val headphonename= stringPreferencesKey("count3")
     val ischarging= booleanPreferencesKey("ischarging")
+    val islowpower= booleanPreferencesKey("islowpower")
 
 
 
@@ -96,12 +98,15 @@ object transparent: GlanceAppWidget() {
                 var bluecount= currentState(key= bluecount)?:0
                 var realheadphonebattery= currentState(key= realheadphonebattery)?:0
                 var headphonename= currentState(key=headphonename)
+                var islowpower= currentState(key= islowpower)
+
 
                 bluecount=0
 
 
                 val batteryIntent =
                     context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+                val powerManager = context?.getSystemService(Context.POWER_SERVICE) as? PowerManager
                 val chargingstatus=batteryIntent!!.getIntExtra(BatteryManager.EXTRA_STATUS,0)
 
 
@@ -168,7 +173,7 @@ object transparent: GlanceAppWidget() {
                         ) {
                         devicename?.let {
                             Text(text = it, style = TextStyle(
-                                color=GlanceTheme   .colors.onSurface,
+                                color=GlanceTheme.colors.onSurface,
                                 fontWeight = FontWeight.Bold
 
 
@@ -182,16 +187,14 @@ object transparent: GlanceAppWidget() {
                         }
 
 
-                        if(batteryLevel>=50){
+                        if(islowpower == true){
 
-                            LinearProgressIndicator(batteryLevel/100f, modifier = GlanceModifier.fillMaxHeight().padding(end = 15.dp, top = 12.dp).size(100.dp).height(21.dp), color = ColorProvider(Color.Green), backgroundColor = ColorProvider(Color.LightGray))
-                        }
-                        else if(batteryLevel<=50){
-                            LinearProgressIndicator(batteryLevel/100f, modifier = GlanceModifier.fillMaxHeight().padding(end = 15.dp, top = 12.dp).size(100.dp).height(21.dp), color = ColorProvider(Color.Green), backgroundColor = ColorProvider(Color.LightGray))
-                        }
-                        else if(batteryLevel<=20){
                             LinearProgressIndicator(batteryLevel/100f, modifier = GlanceModifier.fillMaxHeight().padding(end = 15.dp, top = 12.dp).size(100.dp).height(21.dp), color = ColorProvider(Color.Yellow), backgroundColor = ColorProvider(Color.LightGray))
                         }
+                        else {
+                            LinearProgressIndicator(batteryLevel/100f, modifier = GlanceModifier.fillMaxHeight().padding(end = 15.dp, top = 12.dp).size(100.dp).height(21.dp), color = ColorProvider(Color.Green), backgroundColor = ColorProvider(Color.LightGray))
+                        }
+
 
                         Text(
                             text = "${batterylevel2.value}%",
@@ -298,6 +301,10 @@ class Transparentaction: ActionCallback {
 
 
             val status:Int=batteryIntent!!.getIntExtra(BatteryManager.EXTRA_STATUS,0)
+            val powerManager = context?.getSystemService(Context.POWER_SERVICE) as? PowerManager
+            if (powerManager != null) {
+                prefs[CounterWidget.islowpower]=powerManager.isPowerSaveMode
+            }
             prefs[transparent.ischarging]=ischargingfun(status)
 
             val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
