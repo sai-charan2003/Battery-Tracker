@@ -68,7 +68,7 @@ class viewmodel(application: Context):ViewModel() {
         val batteryStatsReceiver = object : BroadcastReceiver() {
 
             override fun onReceive(context: Context?, intent: Intent?) {
-                val powerManager = context?.getSystemService(Context.POWER_SERVICE) as? PowerManager
+
 
                 val batteryManager = application.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
                 val batteryIntent = application.registerReceiver(
@@ -82,6 +82,7 @@ class viewmodel(application: Context):ViewModel() {
                 batterytype =
                     batteryIntent!!.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY).toString()
                 healthinfo = batteryIntent.getIntExtra(BatteryManager.EXTRA_HEALTH, 0)
+                val powerManager = context?.getSystemService(Context.POWER_SERVICE) as? PowerManager
                 if (powerManager != null) {
                     islowpower=powerManager.isPowerSaveMode
                 }
@@ -108,7 +109,9 @@ class viewmodel(application: Context):ViewModel() {
 
         }
         val filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
+        val lowfilter=IntentFilter(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
         application.registerReceiver(batteryStatsReceiver, filter)
+        application.registerReceiver(batteryStatsReceiver, lowfilter)
 
     }
 
