@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Battery Tracker</string>
+    <string name="title_activity_test">test</string>
+    <string name="Material_3">Material 3 Style Widget</string>
+    <string name="transparent">Transparent Style Widget</string>
+    <string name="title_activity_selectwidget">selectwidget</string>
+    <string name="title_activity_widgetpicket">widgetpicket</string>
+</resources>
