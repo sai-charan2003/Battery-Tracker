@@ -89,6 +89,10 @@ object transparent: GlanceAppWidget() {
     val islowpower= booleanPreferencesKey("islowpower")
 
     var wearosdevice by mutableStateOf(false)
+    var wearosbattery by
+        mutableStateOf("")
+
+
 
 
 
@@ -118,10 +122,7 @@ object transparent: GlanceAppWidget() {
                     mutableStateOf(sharedpreferences.getString("Devicename", Build.MODEL))
                 }
                 val scope= CoroutineScope(Dispatchers.IO)
-                var wearosbattery by remember {
-                    mutableStateOf("")
 
-                }
 
 
                 var headphonebattery= currentState(key = Material3widget.headphonebattery)?:0

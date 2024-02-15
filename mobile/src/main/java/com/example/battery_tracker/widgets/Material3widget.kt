@@ -92,6 +92,10 @@ object Material3widget: GlanceAppWidget() {
     val headphonename= stringPreferencesKey("count3")
     val ischarging= booleanPreferencesKey("ischarging")
     val islowpower= booleanPreferencesKey("islowpower")
+    var wearosbattery by
+        mutableStateOf("")
+
+
 
 
 
@@ -137,10 +141,7 @@ object Material3widget: GlanceAppWidget() {
                 if (powerManager != null) {
                     islowpower=powerManager.isPowerSaveMode
                 }
-                var wearosbattery by remember {
-                    mutableStateOf("")
 
-                }
 
 
                 var wearos :
