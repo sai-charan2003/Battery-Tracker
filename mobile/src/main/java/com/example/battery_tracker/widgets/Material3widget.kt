@@ -142,7 +142,7 @@ object Material3widget: GlanceAppWidget() {
                             )
 
                         }
-                        if (headphoneBattery.isNotEmpty()) {
+                        if (headphoneBattery!="null") {
                             DeviceBatteryView(
                                 deviceName = headphonesName,
                                 deviceBattery = headphoneBattery.toInt(),
