@@ -2,8 +2,13 @@ package com.example.battery_tracker.Navigation
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,12 +31,41 @@ import com.example.battery_tracker.Screens.uiscreen
 
 
 fun NavigationApphost(navController: NavHostController){
-    val uri = "https://www.example.com"
 
-    NavHost(navController = navController, startDestination = Destination.Home.Route, enterTransition = { EnterTransition.None }, exitTransition = { ExitTransition.None}){
+
+    NavHost(
+        navController = navController,
+        startDestination = Destination.Home.Route,
+        enterTransition = {
+            fadeIn() + slideIntoContainer(
+                SlideDirection.Start,
+                initialOffset = { 100 },
+                animationSpec = (tween(easing = LinearEasing, durationMillis = 200))
+            )
+        },
+        exitTransition = {
+            fadeOut() + slideOutOfContainer(
+                SlideDirection.Start,
+                targetOffset = { -100 },
+                animationSpec = (tween(easing = LinearEasing, durationMillis = 200))
+            )
+        },
+        popEnterTransition = {
+            fadeIn() + slideIntoContainer(
+                SlideDirection.End,
+                initialOffset = { -100 },
+                animationSpec = (tween(easing = LinearEasing, durationMillis = 200))
+            )
+        },
+        popExitTransition = {
+            fadeOut() + slideOutOfContainer(
+                SlideDirection.End,
+                targetOffset = { 100 },
+                animationSpec = (tween(easing = LinearEasing, durationMillis = 200))
+            )
+        },){
         composable(route=Destination.Home.Route){
-
-            uiscreen()
+            uiscreen(navController)
         }
         composable(route=Destination.deviceinfo.Route){
             DevieInfoScreen(navController)

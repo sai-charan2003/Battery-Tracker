@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("com.google.gms.google-services")
+    alias(libs.plugins.compose.compiler)
 
 }
 
@@ -23,9 +24,7 @@ android {
     buildFeatures {
         compose =true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion ="1.5.2"
-    }
+
 
 
     buildTypes {
@@ -60,7 +59,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.firebase.database)
-    implementation("androidx.compose.material3:material3:1.2.0-beta02")
+
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -73,11 +72,12 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.androidx.glance)
     implementation (libs.accompanist.swiperefresh)
+    implementation(libs.androidx.material3.android)
 
     // For AppWidgets support
     implementation (libs.androidx.glance.appwidget)
 
-    implementation (libs.androidx.glance.material3)
+
 
     implementation(libs.androidx.navigation.compose)
     implementation (libs.androidx.material.icons.extended)

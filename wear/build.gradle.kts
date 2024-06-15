@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -38,9 +39,7 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -62,7 +61,7 @@ dependencies {
     implementation(libs.androidx.tiles.material)
     implementation(libs.horologist.compose.tools)
     implementation(libs.horologist.tiles)
-    implementation("androidx.compose.material:material-icons-core:1.3.1")
+//    implementation(libs.androidx.material.icons.core)
     implementation(libs.androidx.watchface.complications.data.source.ktx)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)

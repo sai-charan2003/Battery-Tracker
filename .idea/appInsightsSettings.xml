@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.battery_tracker" />
+                  <option name="mobileSdkAppId" value="1:193846329270:android:2bcc1aa8e1491ac16dcb17" />
+                  <option name="projectId" value="battery-tracker-4a5e8" />
+                  <option name="projectNumber" value="193846329270" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
