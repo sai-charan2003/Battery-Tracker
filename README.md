@@ -14,6 +14,5 @@ This application also includes a Wear OS app, which is necessary for obtaining t
 
 ## Screenshots
 
-![471shots_so](https://github.com/sai-charan2003/Battery-Tracker/assets/83913880/bc02074f-dfe4-4cfc-8d23-40baeeb3c001)
 
-![Screenshot_20240215_191717_sysui](https://github.com/sai-charan2003/Battery-Tracker/assets/83913880/f1034d62-fa79-44fc-9730-31f66eb3b027)
+![310shots_so](https://github.com/sai-charan2003/Battery-Tracker/assets/83913880/db1f2384-c00c-48ea-9316-ebd2b04e7942)
