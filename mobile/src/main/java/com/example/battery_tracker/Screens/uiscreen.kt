@@ -52,6 +52,7 @@ import androidx.navigation.NavHostController
 import com.example.battery_tracker.Navigation.Destination
 import com.example.battery_tracker.Screens.components.BodyText
 import com.example.battery_tracker.Screens.components.TitleText
+import com.example.battery_tracker.Utils.SharedPref
 import com.example.battery_tracker.viewModel
 import com.google.android.gms.tasks.Tasks
 import com.google.android.gms.wearable.Node
@@ -72,9 +73,10 @@ fun uiscreen(navHostController: NavHostController) {
 
 
     val context= LocalContext.current
-    val sharedpreferences: SharedPreferences = context.getSharedPreferences("Devicename",Context.MODE_PRIVATE)
+    val sharedPref = SharedPref.getInstance(context)
+
     val devicename by remember {
-        mutableStateOf(sharedpreferences.getString("Devicename", Build.MODEL))
+        mutableStateOf(sharedPref.deviceName)
     }
     LaunchedEffect(key1 = Unit) {
         if (isWearDeviceConnected(context)) {

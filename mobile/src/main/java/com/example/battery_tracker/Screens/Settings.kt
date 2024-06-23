@@ -32,6 +32,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -49,8 +50,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -59,6 +64,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 import androidx.navigation.NavHostController
+import com.example.battery_tracker.Utils.SharedPref
 import com.example.battery_tracker.viewModel
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -71,17 +77,18 @@ import kotlinx.coroutines.launch
 
 fun Settings(navHostController: NavHostController) {
 
-    val sharedPreferences: SharedPreferences = LocalContext.current.getSharedPreferences(
-        "Devicename",
-        Context.MODE_PRIVATE
-    )
-    val editor = sharedPreferences.edit()
+
+
 
     val focusRequester = remember { FocusRequester() }
     var changenamebottomsheet by remember {
         mutableStateOf(false)
     }
+
     val application = LocalContext.current.applicationContext
+    val haptic = LocalHapticFeedback.current
+    val sharedPref = SharedPref.getInstance(application)
+    var sliderPosition by remember { mutableStateOf(sharedPref.minWearosBattery!!.toFloat()) }
     val viewmodel = viewModel<viewModel>(
         factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -236,6 +243,50 @@ fun Settings(navHostController: NavHostController) {
                     modifier=Modifier.clickable { whatsnewbottomsheet=true }
                 )
                 HorizontalDivider()
+                ListItem( {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 10.dp, end = 10.dp),
+
+                    ) {
+                        Row {
+                            Text(text = "Wear OS Low Battery Alerts",modifier=Modifier.weight(1f))
+                            if(sliderPosition==0f){
+                                Text(text = "Off")
+                            }
+                            else{
+                                Text(sliderPosition.toInt().toString())
+                            }
+
+
+
+                        }
+
+
+                        Slider(
+                            modifier = Modifier.semantics { contentDescription = "Localized Description" },
+                            value = sliderPosition,
+                            onValueChange = {
+                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                sliderPosition = it
+                                sharedPref.minWearosBattery=it.toString()
+                                            },
+                            valueRange = 0f..90f,
+                            onValueChangeFinished = {
+
+
+                            },
+
+                            steps = 8
+                        )
+                    }
+
+
+                },
+
+                )
+                HorizontalDivider()
 
                 val intent = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/sai-charan2003/Battery-Tracker")) }
                 val context = LocalContext.current
@@ -301,10 +352,8 @@ fun Settings(navHostController: NavHostController) {
 
                     FilledTonalButton(onClick = {
                         if(changedevicename!=""){
-                            editor.putString(
-                                "Devicename",
-                                changedevicename
-                            );editor.apply();changenamebottomsheet=false
+                            sharedPref.deviceName=changedevicename
+                            changenamebottomsheet=false
                             scope.launch {
                                 snackbarHostState.showSnackbar("Click on the widget to update name")
                             }

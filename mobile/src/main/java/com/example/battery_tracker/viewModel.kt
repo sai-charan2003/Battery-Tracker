@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat
 import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.battery_tracker.Utils.GetBatteryDetails
 import com.example.battery_tracker.widgets.material3.Material3widget
 import com.example.battery_tracker.widgets.transparent.TransparentWidget
 import com.google.android.gms.wearable.Wearable
@@ -86,7 +87,6 @@ class viewModel(application: Context):ViewModel() {
 
 
         val batteryStatsReceiver = object : BroadcastReceiver() {
-
             @RequiresApi(Build.VERSION_CODES.R)
             override fun onReceive(context: Context, intent: Intent?) {
                 phoneBattery(context)
@@ -95,10 +95,7 @@ class viewModel(application: Context):ViewModel() {
                     Material3widget.updateAll(context)
                     TransparentWidget.updateAll(context)
                 }
-
             }
-
-
         }
         val filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
         val lowfilter=IntentFilter(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
@@ -193,13 +190,13 @@ class viewModel(application: Context):ViewModel() {
 
 
 
-        healthstate = gethealthdata(healthinfo)
+        healthstate = GetBatteryDetails.getHealthData(healthinfo)
 
         chargingstatus = batteryIntent!!.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0)
         batterystatus = batteryIntent.getIntExtra(BatteryManager.EXTRA_STATUS, 0)
-        ischargingstatus = getchargingstatus(batterystatus)
+        ischargingstatus = GetBatteryDetails.getChargingStatus(batterystatus)
 
-        chargingtype = getplugged(chargingstatus)
+        chargingtype = GetBatteryDetails.getPlugged(chargingstatus)
         chargecompute = (batteryManager.computeChargeTimeRemaining() / 60000f
                 ).toString().substringBefore(".")
     }
@@ -210,45 +207,14 @@ class viewModel(application: Context):ViewModel() {
 }
 
 
-fun gethealthdata(health: Int): String {
-    var healthstate: String = "null"
-
-    when (health) {
-        BatteryManager.BATTERY_HEALTH_GOOD -> healthstate = "Good"
-        BatteryManager.BATTERY_HEALTH_UNKNOWN -> healthstate = "Unknown"
-        BatteryManager.BATTERY_HEALTH_COLD -> healthstate = "Cold"
-        BatteryManager.BATTERY_HEALTH_DEAD -> healthstate = "Dead"
-        BatteryManager.BATTERY_HEALTH_OVERHEAT -> healthstate = "Over Heat"
-        BatteryManager.BATTERY_HEALTH_OVER_VOLTAGE -> healthstate = "Over Voltage"
 
 
-    }
-    return healthstate
 
-}
 
-fun getchargingstatus(status: Int): String {
-    var chargingstatus by mutableStateOf("null")
-    when (status) {
-        BatteryManager.BATTERY_STATUS_CHARGING -> chargingstatus = "Charging"
-        BatteryManager.BATTERY_STATUS_FULL -> chargingstatus = "Full"
-        BatteryManager.BATTERY_STATUS_DISCHARGING -> chargingstatus = "Discharging"
-        BatteryManager.BATTERY_STATUS_NOT_CHARGING -> chargingstatus = "Not Charging"
-    }
-    return chargingstatus
-}
 
-fun getplugged(plugged: Int): String {
-    var typeplug: String = "null"
-    when (plugged) {
-        BatteryManager.BATTERY_PLUGGED_AC -> typeplug = "AC"
-        BatteryManager.BATTERY_PLUGGED_USB -> typeplug = "USB"
-        BatteryManager.BATTERY_PLUGGED_DOCK -> typeplug = "Dock"
-        BatteryManager.BATTERY_PLUGGED_WIRELESS -> typeplug = "Wireless"
 
-    }
-    return typeplug
-}
+
+
 
 
 

@@ -6,6 +6,9 @@ import android.content.IntentFilter
 import android.os.BatteryManager
 import android.os.Build
 import android.util.Log
+import androidx.glance.appwidget.updateAll
+import com.example.battery_tracker.widgets.material3.Material3widget
+import com.example.battery_tracker.widgets.transparent.TransparentWidget
 import com.google.android.gms.tasks.Tasks
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
@@ -28,7 +31,7 @@ class PhoneListenerService: WearableListenerService() {
 
 
     override fun onCreate() {
-        Log.d(TAG, "onMessageReceived: hi from the lis")
+
 
 
 
@@ -52,12 +55,17 @@ class PhoneListenerService: WearableListenerService() {
                     "/deploy",
                     ouput.toByteArray()
                 ).apply {
-                    addOnSuccessListener { Log.d("TAG", "OnSuccess") }
-                    addOnFailureListener { Log.d("TAG", "OnFailure") }
+                    addOnSuccessListener {
+
+                    }
+                    addOnFailureListener {  }
                 }
 
 
+
             }.toString()
+            Material3widget.updateAll(applicationContext)
+            TransparentWidget.updateAll(applicationContext)
 
         }
 

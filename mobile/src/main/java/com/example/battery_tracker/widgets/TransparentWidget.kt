@@ -1,7 +1,6 @@
 package com.example.battery_tracker.widgets.transparent
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.LaunchedEffect
@@ -14,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
-import androidx.glance.LocalContext
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
@@ -25,62 +23,60 @@ import androidx.glance.layout.Alignment
 import androidx.glance.layout.Column
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
+import com.example.battery_tracker.Utils.AppConstants
 import com.example.battery_tracker.Utils.BatteryWidgetUpdateWorker
+import com.example.battery_tracker.Utils.GetBatteryDetails
+import com.example.battery_tracker.Utils.SharedPref
 
 import com.example.battery_tracker.viewModel
 import com.example.battery_tracker.widgets.components.DeviceBatteryView
-
+import com.example.battery_tracker.widgets.material3.Material3widget
 import com.google.android.gms.wearable.Wearable
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
 object TransparentWidget: GlanceAppWidget() {
-
-
-
-
-
-
-
+    var wearosString by
+        mutableStateOf("null")
 
     @RequiresApi(Build.VERSION_CODES.R)
     override suspend fun provideGlance(context: Context, glanceId: GlanceId) {
-
-
-
-
-
-
         provideContent{
             GlanceTheme {
                 LaunchedEffect(Unit) {
-                    BatteryWidgetUpdateWorker.setup()
+                    BatteryWidgetUpdateWorker.setup(context)
                 }
+                val sharedPref = SharedPref.getInstance(context)
                 val viewModel= viewModel(context)
                 viewModel.phoneBattery(context)
                 viewModel.bluetoothBattery(context)
 
 
-                val sharedpreferences:SharedPreferences= LocalContext.current.getSharedPreferences("Devicename",Context.MODE_PRIVATE)
-                val devicename by remember {
-                    mutableStateOf(sharedpreferences.getString("Devicename", Build.MODEL))
+
+                val deviceName by remember {
+                    mutableStateOf(sharedPref.deviceName)
                 }
 
                 val phoneBattery = viewModel.batterylevel
                 val isPhoneCharging = viewModel.ischargingstatus
                 val isPhoneLowPowerMode = viewModel.islowpower
                 val wearosName=viewModel.wearosName
-                var wearosString by remember {
-                    mutableStateOf("null")
-                }
-                Wearable.getMessageClient(context).addListener {
-                    wearosString = String(it.data)
 
+                Wearable.getMessageClient(context).addListener {
+                    Material3widget.wearosString = String(it.data)
                 }
-                val wearosBattery = wearosString.substringBefore("ischarging")
-                val isWearosCharging = wearosString.substringAfter("ischarging").toBoolean()
+                val wearosBattery = Material3widget.wearosString.substringBefore(AppConstants.WEAROS_CHARGING_DIVIDER)
+                val isWearosCharging = Material3widget.wearosString.substringAfter(AppConstants.WEAROS_CHARGING_DIVIDER).toBoolean()
+                if(wearosBattery<= sharedPref.minWearosBattery.toString()){
+                    if(!sharedPref.isNotificationSent) {
+                        GetBatteryDetails.showLowBatteryNotification(wearosBattery, context)
+                    }
+                } else{
+                    sharedPref.isNotificationSent=false
+                }
 
 
                 val headphonesName = viewModel.headPhoneName
@@ -106,7 +102,7 @@ object TransparentWidget: GlanceAppWidget() {
                         horizontalAlignment = Alignment.Horizontal.CenterHorizontally
                     ) {
                         DeviceBatteryView(
-                            deviceName = devicename!!,
+                            deviceName = deviceName!!,
                             deviceBattery = phoneBattery,
                             isCharging = if (isPhoneCharging == "Charging") true else false,
                             isLowPowerMode = isPhoneLowPowerMode,

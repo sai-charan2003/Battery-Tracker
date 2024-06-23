@@ -105,6 +105,11 @@ class MainActivity : ComponentActivity() {
 
 
             }
+            Wearable.getMessageClient(context).addListener {
+
+                Log.d("TAG", "Greeting: ${String(it.data)}")
+
+            }
             WearApp("Android")
 
         }
