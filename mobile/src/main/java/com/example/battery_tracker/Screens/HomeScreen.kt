@@ -229,7 +229,15 @@ fun HomeScreen(navHostController: NavHostController) {
                     )
                     BodyText(
                         text = "${viewmodel.voltage / 1000f}V",
-                        modifier = Modifier.padding(top = 3.dp, start = 10.dp)
+                        modifier = Modifier
+                            .padding(top = 3.dp, start = 10.dp)
+                            .then(
+                                if(viewmodel.ischargingstatus!="Charging"){
+                                    Modifier.padding(bottom = 30.dp)
+                                } else{
+                                    Modifier
+                                }
+                            )
                     )
 
 
@@ -253,7 +261,7 @@ fun HomeScreen(navHostController: NavHostController) {
                         )
                         BodyText(
                             text = viewmodel.chargingtype,
-                            modifier = Modifier.padding(top = 3.dp, start = 10.dp,bottom=10.dp)
+                            modifier = Modifier.padding(top = 3.dp, start = 10.dp,bottom=30.dp)
                         )
                     }
 
