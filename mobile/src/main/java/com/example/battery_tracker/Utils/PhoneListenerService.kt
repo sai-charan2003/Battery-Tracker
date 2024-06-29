@@ -1,4 +1,4 @@
-package com.example.battery_tracker
+package com.example.battery_tracker.Utils
 
 import android.content.Context
 import android.content.Intent

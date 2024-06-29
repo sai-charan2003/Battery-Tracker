@@ -22,6 +22,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.battery_tracker.Utils.GetBatteryDetails
 import com.example.battery_tracker.widgets.material3.Material3widget
 import com.example.battery_tracker.widgets.transparent.TransparentWidget
+import com.google.android.gms.tasks.Tasks
 import com.google.android.gms.wearable.Wearable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -133,7 +134,7 @@ class viewModel(application: Context):ViewModel() {
                     viewModelScope.launch(Dispatchers.IO) {
                         val text = ""
                         var transcriptionNodeId: String? = null
-                        transcriptionNodeId = com.example.battery_tracker.Screens.getNodes(context)
+                        transcriptionNodeId = getNodes(context)
                             .forEach { nodeId ->
                             Wearable.getMessageClient(context).sendMessage(
                                 nodeId,
@@ -199,6 +200,11 @@ class viewModel(application: Context):ViewModel() {
         chargingtype = GetBatteryDetails.getPlugged(chargingstatus)
         chargecompute = (batteryManager.computeChargeTimeRemaining() / 60000f
                 ).toString().substringBefore(".")
+    }
+
+    fun getNodes(context: Context): Collection<String> {
+
+        return Tasks.await(Wearable.getNodeClient(context).connectedNodes).map { it.displayName }
     }
 
 

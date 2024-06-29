@@ -23,6 +23,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.core.app.ActivityCompat
 
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModel
@@ -44,14 +45,14 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.S)
-    @OptIn(ExperimentalMaterial3Api::class)
+
     @SuppressLint("UnrememberedMutableState")
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.BLUETOOTH_CONNECT),2)
         setContent {
             Battery_Trackertheme() {
                 NavigationApphost(navController = rememberNavController())

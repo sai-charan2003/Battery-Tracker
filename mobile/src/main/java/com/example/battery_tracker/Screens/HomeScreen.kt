@@ -1,18 +1,13 @@
 package com.example.battery_tracker.Screens
 
-import android.content.Context
-import android.content.SharedPreferences
-import android.os.Build
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MoreVert
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -25,19 +20,16 @@ import androidx.compose.material3.LinearProgressIndicator
 
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -54,13 +46,10 @@ import com.example.battery_tracker.Screens.components.BodyText
 import com.example.battery_tracker.Screens.components.TitleText
 import com.example.battery_tracker.Utils.SharedPref
 import com.example.battery_tracker.viewModel
-import com.google.android.gms.tasks.Tasks
-import com.google.android.gms.wearable.Node
-import com.google.android.gms.wearable.Wearable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun uiscreen(navHostController: NavHostController) {
+fun HomeScreen(navHostController: NavHostController) {
     val application = LocalContext.current.applicationContext
     val viewmodel = viewModel<viewModel>(
         factory = object : ViewModelProvider.Factory {
@@ -71,21 +60,13 @@ fun uiscreen(navHostController: NavHostController) {
     )
     val scroll = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-
     val context= LocalContext.current
     val sharedPref = SharedPref.getInstance(context)
 
-    val devicename by remember {
+    val deviceName by remember {
         mutableStateOf(sharedPref.deviceName)
     }
-    LaunchedEffect(key1 = Unit) {
-        if (isWearDeviceConnected(context)) {
-//            Log.d("TAG", "uiscreen: connected")
-        } else {
-//            Log.d("TAG", "uiscreen: not connected")
-        }
 
-    }
 
     viewmodel.batteryData()
     val color by remember {
@@ -118,7 +99,7 @@ fun uiscreen(navHostController: NavHostController) {
                         onDismissRequest = { showdropdownmenu=false }) {
                         DropdownMenuItem(
                             text = { Text("Settings") },
-                            onClick = { navHostController.navigate(Destination.settings.Route) })
+                            onClick = { navHostController.navigate(Destination.settings.route) })
 
                         
                     }
@@ -283,24 +264,4 @@ fun uiscreen(navHostController: NavHostController) {
     }
 
 }
-fun isWearDeviceConnected(context: Context): Boolean {
-    val nodeClient = Wearable.getNodeClient(context)
 
-    try {
-        // Fetch the connected nodes
-        val nodes: Collection<Node> = Tasks.await(nodeClient.connectedNodes)
-
-        // Check if there is at least one connected node (Wear OS device)
-        return nodes.isNotEmpty()
-    } catch (exception: Exception) {
-        // Handle the exception (e.g., GoogleApiAvailabilityException)
-        return false
-    }
-}
-fun getNodes(context: Context): Collection<String> {
-
-    return Tasks.await(Wearable.getNodeClient(context).connectedNodes).map { it.displayName }
-}
-fun getnodenames(context:Context):Collection<String>{
-    return Tasks.await(Wearable.getNodeClient(context).connectedNodes).map { it.displayName }
-}

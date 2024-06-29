@@ -68,27 +68,56 @@ object GetBatteryDetails {
         return wearosData.substringAfter(AppConstants.WEAROS_CHARGING_DIVIDER).toBoolean()
     }
 
-    fun showLowBatteryNotification(batteryLevel: String,context:Context) {
+    fun showLowBatteryNotification(wearosName:String,batteryLevel: String,context:Context) {
         val sharedPref = SharedPref.getInstance(context)
-        sharedPref.isNotificationSent=true
+        if(sharedPref.isNotificationAllowed) {
+            sharedPref.isNotificationSent = true
 
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val channelId = "battery_low_channel"
+            val notificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val channelId = "battery_low_channel"
 
-        val channel = NotificationChannel(
-            channelId,
-            "Low Battery Notifications",
-            NotificationManager.IMPORTANCE_HIGH
-        )
-        notificationManager.createNotificationChannel(channel)
+            val channel = NotificationChannel(
+                channelId,
+                "Low Battery Notifications",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(channel)
 
-        val notification = NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(R.drawable.charging)
-            .setContentTitle("Low Wear OS Battery")
-            .setContentText("Wear OS battery is at $batteryLevel%. Please charge your device.")
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .build()
+            val notification = NotificationCompat.Builder(context, channelId)
+                .setSmallIcon(R.drawable.baseline_watch_24)
+                .setContentTitle("Low Battery")
+                .setContentText("$wearosName battery is at $batteryLevel%. Please charge your device.")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .build()
 
-        notificationManager.notify(1, notification)
+            notificationManager.notify(1, notification)
+        }
+    }
+
+    fun showLowBatteryNotificationForHeadPhones(headphonesName:String,batteryLevel: String,context: Context) {
+        val sharedPref = SharedPref.getInstance(context)
+        if (sharedPref.isNotificationAllowed) {
+            sharedPref.isNotificationSentForHeadPhones = true
+            val notificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val channelId = "battery_low_channel_headphones"
+
+            val channel = NotificationChannel(
+                channelId,
+                "Low Battery Notification For Wear Os",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(channel)
+            val notification = NotificationCompat.Builder(context, channelId)
+                .setSmallIcon(R.drawable.earphones)
+                .setContentTitle("Low Battery")
+                .setContentText("$headphonesName is at $batteryLevel%. Please charge your device.")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .build()
+
+            notificationManager.notify(2, notification)
+
+        }
     }
 }

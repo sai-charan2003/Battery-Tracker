@@ -2,6 +2,7 @@ package com.example.battery_tracker.widgets.transparent
 
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -70,17 +71,37 @@ object TransparentWidget: GlanceAppWidget() {
                 }
                 val wearosBattery = Material3widget.wearosString.substringBefore(AppConstants.WEAROS_CHARGING_DIVIDER)
                 val isWearosCharging = Material3widget.wearosString.substringAfter(AppConstants.WEAROS_CHARGING_DIVIDER).toBoolean()
-                if(wearosBattery<= sharedPref.minWearosBattery.toString()){
-                    if(!sharedPref.isNotificationSent) {
-                        GetBatteryDetails.showLowBatteryNotification(wearosBattery, context)
+                if(wearosString != "null" && wearosName!="null") {
+                    if (wearosBattery <= sharedPref.minWearosBattery.toString()) {
+                        if (!sharedPref.isNotificationSent) {
+                            GetBatteryDetails.showLowBatteryNotification(
+                                wearosName,
+                                wearosBattery,
+                                context
+                            )
+                        }
+                    } else if (wearosBattery > sharedPref.minWearosBattery.toString()) {
+                        sharedPref.isNotificationSent = false
                     }
-                } else{
-                    sharedPref.isNotificationSent=false
                 }
 
 
                 val headphonesName = viewModel.headPhoneName
                 val headphoneBattery = viewModel.bluetoothBattery
+                if(headphoneBattery.isNotEmpty()) {
+
+                    if (headphoneBattery <= sharedPref.minHeadphonesBattery.toString()) {
+                        if (!sharedPref.isNotificationSentForHeadPhones) {
+                            GetBatteryDetails.showLowBatteryNotificationForHeadPhones(
+                                headphonesName,
+                                headphoneBattery,
+                                context
+                            )
+                        } else if (headphoneBattery > sharedPref.minHeadphonesBattery.toString()) {
+                            sharedPref.isNotificationSentForHeadPhones = false
+                        }
+                    }
+                }
 
 
 
