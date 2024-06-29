@@ -1,14 +1,13 @@
 package com.example.battery_tracker.Screens
 
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
 
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,10 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowRight
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.automirrored.outlined.ArrowLeft
-import androidx.compose.material.icons.filled.ArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
@@ -27,7 +23,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
@@ -35,6 +30,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -58,12 +54,14 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-
-
 import androidx.navigation.NavHostController
+import com.example.battery_tracker.Screens.components.SettingsItem
+import com.example.battery_tracker.Utils.PermissionCheck
 import com.example.battery_tracker.Utils.SharedPref
 import com.example.battery_tracker.viewModel
 import com.google.firebase.database.DataSnapshot
@@ -71,15 +69,14 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
 fun Settings(navHostController: NavHostController) {
-
-
-
-
+    val context = LocalContext.current
     val focusRequester = remember { FocusRequester() }
     var changenamebottomsheet by remember {
         mutableStateOf(false)
@@ -89,6 +86,8 @@ fun Settings(navHostController: NavHostController) {
     val haptic = LocalHapticFeedback.current
     val sharedPref = SharedPref.getInstance(application)
     var sliderPosition by remember { mutableStateOf(sharedPref.minWearosBattery!!.toFloat()) }
+    var sliderPositionForHeadphones by remember { mutableStateOf(sharedPref.minHeadphonesBattery!!.toFloat()) }
+
     val viewmodel = viewModel<viewModel>(
         factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -96,71 +95,41 @@ fun Settings(navHostController: NavHostController) {
             }
         }
     )
+
+
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var changedevicename by remember {
         mutableStateOf("")
     }
-    val snackbarscope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState() }
-    var checkforupdatebottomsheet by remember {
-        mutableStateOf(false)
+
+
+    sharedPref.isNotificationAllowed = if(PermissionCheck.notificationPermissionEnabled(context)){
+        sharedPref.isNotificationAllowed
+    } else{
+        false
     }
+    var isNotificationAllowed by remember {
+        mutableStateOf(sharedPref.isNotificationAllowed)
+    }
+
+    val snackbarHostState = remember { SnackbarHostState() }
     var whatsnewbottomsheet by remember {
         mutableStateOf(false)
     }
-    val firebaseDatabase = FirebaseDatabase.getInstance()
-    var version by remember {
-        mutableStateOf("0")
-    }
-    var downloadlink by remember {
-        mutableStateOf("null")
-    }
-    var newversion by remember {
+
+    var changeMinimumBatteryLevel by remember {
         mutableStateOf(false)
     }
-    var link by remember {
-        mutableStateOf("null")
-    }
     val scroll = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    val reference = firebaseDatabase.reference
-    var list = remember {
-        mutableListOf<Any>()
+    var isNearByDevicesPermissionEnabled by remember {
+        mutableStateOf(PermissionCheck.nearbyDevicePermissionEnabled(context))
     }
-    reference.addValueEventListener(object : ValueEventListener {
-
-        override fun onDataChange(snapshot: DataSnapshot) {
 
 
-            if (snapshot.exists()) {
-
-                for (data in snapshot.children) {
-
-                    Log.d("TAG", "onDataChange: ${data.value}")
-                    data.value?.let { list.add(it) }
-
-                }
-
-                link = list[1].toString()
-                version = list[2].toString()
-                downloadlink = list[0].toString()
-
-                val appversion = "4.1"
-                if (appversion != version) {
-                    newversion = true
-
-                }
+    val intent = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/sai-charan2003/Battery-Tracker")) }
 
 
-            }
-
-        }
-
-        override fun onCancelled(error: DatabaseError) {
-
-        }
-
-    })
     Scaffold(
         modifier = Modifier.nestedScroll(scroll.nestedScrollConnection),
         snackbarHost = {
@@ -190,130 +159,75 @@ fun Settings(navHostController: NavHostController) {
                 .padding(it)
         ) {
             item {
-                ListItem( {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 10.dp, end = 10.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(text = "Change phone name on widget")
+                SettingsItem(title = "Change Phone Name") {
+                    changenamebottomsheet=true                    
+                }
+                HorizontalDivider()
+                SettingsItem(title = "What's new") {
+                    whatsnewbottomsheet=true                    
+                }
+                HorizontalDivider()
+                SettingsItem(title = "Notification Settings") {
+                    changeMinimumBatteryLevel=true
 
-
-                        Icon(imageVector = Icons.Filled.ArrowRight, contentDescription = "Arrow")
-                    }
-
-
-                },
-                    modifier=Modifier.clickable { changenamebottomsheet=true }
-                )
+                }
                 HorizontalDivider()
 
-                ListItem( {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 10.dp, end = 10.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(text = "Check for update")
+                SettingsItem(title = "Project On Github") {
+                    context.startActivity(intent)
+                    
+                }
+            }
+        }
 
-                        Icon(imageVector = Icons.Filled.ArrowRight, contentDescription = "Arrow")
-                    }
+    }
 
+    fun requestPermission(){
+        ActivityCompat.requestPermissions(context as Activity, arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),1)
+    }
 
-                },
-                    modifier=Modifier.clickable { checkforupdatebottomsheet=true }
-                )
-                HorizontalDivider()
-                ListItem( {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 10.dp, end = 10.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(text = "What's new")
+    fun openAppSettings() {
 
-                        Icon(imageVector = Icons.Filled.ArrowRight, contentDescription = "Arrow")
-                    }
+        val intent = Intent(
+            android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            Uri.fromParts("package", context.packageName, null)
+        )
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
+    }
 
+    fun checkForPermission(){
 
-                },
-                    modifier=Modifier.clickable { whatsnewbottomsheet=true }
-                )
-                HorizontalDivider()
-                ListItem( {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 10.dp, end = 10.dp),
-
-                    ) {
-                        Row {
-                            Text(text = "Wear OS Low Battery Alerts",modifier=Modifier.weight(1f))
-                            if(sliderPosition==0f){
-                                Text(text = "Off")
-                            }
-                            else{
-                                Text(sliderPosition.toInt().toString())
-                            }
-
-
-
-                        }
-
-
-                        Slider(
-                            modifier = Modifier.semantics { contentDescription = "Localized Description" },
-                            value = sliderPosition,
-                            onValueChange = {
-                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                sliderPosition = it
-                                sharedPref.minWearosBattery=it.toString()
-                                            },
-                            valueRange = 0f..90f,
-                            onValueChangeFinished = {
-
-
-                            },
-
-                            steps = 8
-                        )
-                    }
-
-
-                },
-
-                )
-                HorizontalDivider()
-
-                val intent = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/sai-charan2003/Battery-Tracker")) }
-                val context = LocalContext.current
-                ListItem( {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 10.dp, end = 10.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(text = "Project on Github")
-
-                        Icon(
-                            imageVector = Icons.Filled.ArrowRight,
-                            contentDescription = "Arrow"
-                        )
-                    }
-
-
-                },
-                    modifier=Modifier.clickable { context.startActivity(intent) }
-                )
-
-
+        if(ContextCompat.checkSelfPermission(context,android.Manifest.permission.POST_NOTIFICATIONS)==PackageManager.PERMISSION_GRANTED){
+            isNotificationAllowed=true
+            sharedPref.isNotificationAllowed=true
+        } else{
+            if(ActivityCompat.shouldShowRequestPermissionRationale(context as Activity, android.Manifest.permission.POST_NOTIFICATIONS)){
+                openAppSettings()
+            } else{
+                requestPermission()
             }
 
+        }
 
+    }
+
+    fun requestNearbyDevicePermission(){
+        ActivityCompat.requestPermissions(context as Activity, arrayOf(android.Manifest.permission.BLUETOOTH_CONNECT),2)
+    }
+
+    fun checkForBluetoothPermission(){
+
+        if(ContextCompat.checkSelfPermission(context,android.Manifest.permission.BLUETOOTH_CONNECT)==PackageManager.PERMISSION_GRANTED){
+            isNearByDevicesPermissionEnabled=true
+
+
+        } else{
+            if(ActivityCompat.shouldShowRequestPermissionRationale(context as Activity, android.Manifest.permission.BLUETOOTH_CONNECT)){
+                requestNearbyDevicePermission()
+            } else{
+                openAppSettings()
+            }
 
         }
 
@@ -372,66 +286,6 @@ fun Settings(navHostController: NavHostController) {
         }
 
     }
-    if (checkforupdatebottomsheet) {
-        ModalBottomSheet(onDismissRequest = { checkforupdatebottomsheet = false }) {
-            Column(modifier = Modifier.padding(start = 10.dp, end = 5.dp)) {
-
-                if (newversion) {
-                    Text(
-                        text = "New Version Available",
-                        style = MaterialTheme.typography.headlineSmall,
-                        modifier = Modifier
-                            .fillMaxWidth(),
-
-                        textAlign = TextAlign.Center,
-                        color = Color.Red
-                    )
-                } else {
-                    Text(
-                        text = "You are up to date",
-                        style = MaterialTheme.typography.headlineSmall,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 10.dp),
-                        textAlign = TextAlign.Center
-                    )
-                }
-                val context = LocalContext.current
-
-                Text(text = "Version: $version", modifier = Modifier.padding(top=10.dp,bottom=10.dp))
-
-
-                if (newversion) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.End,
-                        verticalArrangement = Arrangement.Bottom
-                    ) {
-
-
-                        val context = LocalContext.current
-                        val intent = remember {
-                            Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("$downloadlink")
-                            )
-                        }
-
-                        Button(onClick = {
-                            context.startActivity(intent)
-                        }, modifier = Modifier
-                            .padding(bottom = 10.dp)
-                            .fillMaxWidth()) {
-                            Text(text = "Update")
-
-                        }
-                    }
-                }
-
-            }
-
-        }
-    }
     if (whatsnewbottomsheet) {
         ModalBottomSheet(onDismissRequest = { whatsnewbottomsheet = false }) {
             Column(modifier = Modifier.padding(start = 10.dp, bottom = 10.dp)) {
@@ -476,6 +330,103 @@ fun Settings(navHostController: NavHostController) {
 
         }
     }
+    if(changeMinimumBatteryLevel){
+        ModalBottomSheet(onDismissRequest = { changeMinimumBatteryLevel=false }) {
+            Column(modifier = Modifier.padding(10.dp)) {
+                Row(modifier = Modifier.padding(10.dp)) {
+                    Text(
+                        text = "Notifications", modifier = Modifier
+                            .weight(1f)
+                            .align(Alignment.CenterVertically)
+                    )
+                    Switch(checked = isNotificationAllowed, onCheckedChange = {
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        if (it) {
+                            checkForPermission()
+                        } else {
+                            sharedPref.isNotificationAllowed = false
+                            isNotificationAllowed = false
+                        }
+                    })
+
+                }
+                if (isNearByDevicesPermissionEnabled) {
+                    Row(modifier = Modifier.padding(10.dp)) {
+                        Text(text = "Wear OS Low Battery Alert", modifier = Modifier.weight(1f))
+                        Text(text = sharedPref.minWearosBattery?.toInt().toString())
+
+                    }
+
+
+                    Slider(
+                        modifier = Modifier.semantics {
+                            contentDescription = "Localized Description"
+                        },
+                        value = sliderPosition,
+                        onValueChange = {
+                            val value = it.roundToInt()
+                            sliderPosition = value.toFloat()
+                            sharedPref.minWearosBattery = value.toString()
+                        },
+                        valueRange = 0f..90f,
+                        onValueChangeFinished = {
+                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+
+
+                        },
+
+                        steps = 8
+                    )
+                    Row(modifier = Modifier.padding(10.dp)) {
+                        Text(text = "Headphones Low Battery Alert", modifier = Modifier.weight(1f))
+                        Text(text = sharedPref.minHeadphonesBattery?.toInt().toString())
+
+                    }
+
+
+                    Slider(
+                        modifier = Modifier.semantics {
+                            contentDescription = "Localized Description"
+                        },
+                        value = sliderPositionForHeadphones,
+                        onValueChange = {
+                            val value = it.roundToInt()
+
+                            sliderPositionForHeadphones = value.toFloat()
+                            sharedPref.minHeadphonesBattery = value.toString()
+                        },
+                        valueRange = 0f..90f,
+                        onValueChangeFinished = {
+                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        },
+
+                        steps = 8
+                    )
+                } else{
+                    Row(modifier = Modifier
+                        .clickable { checkForBluetoothPermission() }
+                        .padding(10.dp)) {
+                        Text(
+                            text = "Enable Bluetooth Permission", modifier = Modifier
+                                .weight(1f)
+                                .align(Alignment.CenterVertically)
+                        )
+
+
+                    }
+            }
+
+        }
+            
+            
+        }
+    }
+
+
+
+
+
+
 }
 
 
