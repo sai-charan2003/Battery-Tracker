@@ -48,11 +48,11 @@ import androidx.wear.compose.material.OutlinedButton
 
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
-import com.example.battery_tracker.R
-import com.example.battery_tracker.presentation.theme.Battery_TrackerTheme
+import dev.charan.batteryTracker.R
 import com.google.android.gms.tasks.Tasks
 import com.google.android.gms.wearable.Wearable
 import com.google.android.gms.wearable.WearableListenerService
+import dev.charan.batteryTracker.presentation.theme.Battery_TrackerTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

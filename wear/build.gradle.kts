@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.battery_tracker"
+    namespace = "dev.charan.batteryTracker"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.battery_tracker"
+        applicationId = "dev.charan.batteryTracker"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
