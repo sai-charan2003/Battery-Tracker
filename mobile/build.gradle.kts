@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.Lint
+import com.android.build.api.dsl.LintOptions
 import org.jetbrains.kotlin.gradle.utils.property
 import java.util.Properties
 
@@ -10,6 +12,9 @@ plugins {
 }
 
 android {
+    fun Lint.() {
+        checkReleaseBuilds = false
+    }
 
 
 
