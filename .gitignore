@@ -14,5 +14,7 @@
 .cxx
 local.properties
 /mobile/google-services.json
+/mobile/src/debug
+/mobile/src/release
 
 .kotlin/

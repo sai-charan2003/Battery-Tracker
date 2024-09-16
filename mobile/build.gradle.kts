@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.utils.property
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -7,11 +10,14 @@ plugins {
 }
 
 android {
-    namespace = "com.example.battery_tracker"
+
+
+
+    namespace = "dev.charan.batteryTracker"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.battery_tracker"
+        applicationId = "dev.charan.batteryTracker"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
@@ -20,14 +26,32 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").inputStream())
+        val apiKey = properties.getProperty("API_KEY") ?: ""
+        buildConfigField(
+            type = "String",
+            name = "API_KEY",
+            value = apiKey
+        )
+
+
     }
     buildFeatures {
+        buildConfig = true
         compose =true
     }
 
 
 
     buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+            isDebuggable = true
+
+
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -82,6 +106,10 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation (libs.androidx.material.icons.extended)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+    implementation (libs.okhttp)
+    implementation (libs.logging.interceptor)
     implementation (libs.play.services.wearable)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
