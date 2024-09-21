@@ -83,6 +83,7 @@ object Material3widget: GlanceAppWidget() {
                     wearosString = String(it.data)
                 }
                 val wearosBattery = wearosString.substringBefore(AppConstants.WEAROS_CHARGING_DIVIDER)
+                Log.d("TAG", "provideGlance: $wearosBattery")
                 val isWearosCharging = wearosString.substringAfter(AppConstants.WEAROS_CHARGING_DIVIDER).toBoolean()
                 if(wearosString != "null" && wearosName!="null") {
                     Log.d("TAG", "provideGlance: sending notification")
@@ -162,7 +163,7 @@ object Material3widget: GlanceAppWidget() {
 
                         )
 
-                        if (wearosString != "null" && wearosName!="null") {
+                        if (wearosString != "null" && wearosName!="null" && wearosBattery != "getbattery") {
                             DeviceBatteryView(
                                 deviceName = wearosName,
                                 deviceBattery = wearosBattery.toInt(),

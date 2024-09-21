@@ -9,9 +9,12 @@ plugins {
     id("com.google.gms.google-services")
     alias(libs.plugins.compose.compiler)
 
+
+
 }
 
 android {
+
     fun Lint.() {
         checkReleaseBuilds = false
     }
