@@ -107,13 +107,17 @@ object Material3widget: GlanceAppWidget() {
                 if(headphoneBattery.isNotEmpty()) {
                     Log.d("TAG", "provideGlance: $headphoneBattery")
                     if (headphoneBattery <= sharedPref.minHeadphonesBattery.toString() && headphoneBattery!="100") {
+
                         if (!sharedPref.isNotificationSentForHeadPhones) {
+                            Log.d("TAG", "provideGlance: ${sharedPref.isNotificationSentForHeadPhones}")
                             GetBatteryDetails.showLowBatteryNotificationForHeadPhones(
                                 headphonesName,
                                 headphoneBattery,
-                                context
+                                context,
+                                sharedPref
                             )
                         } else if (headphoneBattery > sharedPref.minHeadphonesBattery.toString()) {
+                            Log.d("TAG", "provideGlance: test ")
                             sharedPref.isNotificationSentForHeadPhones = false
                         }
                     }

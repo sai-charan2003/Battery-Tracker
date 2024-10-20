@@ -5,7 +5,9 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.filled.ArrowRight
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,6 +25,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -60,6 +64,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import dev.charan.batteryTracker.Screens.components.SettingsItem
+
 import dev.charan.batteryTracker.Utils.PermissionCheck
 import dev.charan.batteryTracker.Utils.SharedPref
 import dev.charan.batteryTracker.data.model.AutoUpdateDTO
@@ -79,9 +84,13 @@ fun Settings(navHostController: NavHostController) {
         mutableStateOf(false)
     }
 
+
     val application = LocalContext.current.applicationContext
     val haptic = LocalHapticFeedback.current
     val sharedPref = SharedPref.getInstance(application)
+    var isDarkMode by remember {
+        mutableStateOf(sharedPref.isDarkModeEnabled)
+    }
     var sliderPosition by remember { mutableStateOf(sharedPref.minWearosBattery!!.toFloat()) }
     var sliderPositionForHeadphones by remember { mutableStateOf(sharedPref.minHeadphonesBattery!!.toFloat()) }
     var latestAppVersion by remember {
@@ -206,6 +215,32 @@ fun Settings(navHostController: NavHostController) {
                 SettingsItem(title = "Check for update") {
                     showCheckForUpdate = true
                 }
+                HorizontalDivider()
+                ListItem( {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 10.dp, end = 10.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(text = "Dark mode")
+
+                        Switch(checked = isDarkMode, onCheckedChange = {
+                            if(it==true) {
+                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                                sharedPref.isDarkModeEnabled = true
+                            } else{
+                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                                sharedPref.isDarkModeEnabled = false
+                            }
+                        }
+                        )
+                    }
+
+
+                },
+
+                )
             }
 
         }

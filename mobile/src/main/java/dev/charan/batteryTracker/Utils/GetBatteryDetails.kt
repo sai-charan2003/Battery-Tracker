@@ -94,8 +94,7 @@ object GetBatteryDetails {
         }
     }
 
-    fun showLowBatteryNotificationForHeadPhones(headphonesName:String,batteryLevel: String,context: Context) {
-        val sharedPref = SharedPref.getInstance(context)
+    fun showLowBatteryNotificationForHeadPhones(headphonesName:String,batteryLevel: String,context: Context,sharedPref: SharedPref) {
         if (sharedPref.isNotificationAllowed) {
             sharedPref.isNotificationSentForHeadPhones = true
             val notificationManager =

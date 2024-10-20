@@ -9,5 +9,6 @@ object AppConstants {
     const val MIN_WEAR_OS_POWER="min_Wearos_power"
     const val MIN_HEADPHONE_POWER="min_headphone_power"
     const val IS_NOTIFICATION_ALLOWED = "isNotificationAllowed"
+    const val IS_DARK_MODE = "isDarkMode"
 
 }

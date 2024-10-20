@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.core.content.ContextCompat
 
 class SharedPref(private val context: Context) {
@@ -78,5 +79,14 @@ class SharedPref(private val context: Context) {
             val sharedPreferences = context.getSharedPreferences(KEY_SHAREDPREF_KEY, Context.MODE_PRIVATE)
             sharedPreferences.edit().putBoolean(AppConstants.IS_NOTIFICATION_ALLOWED,value).apply()
 
+        }
+    var isDarkModeEnabled
+        get() = run {
+            val sharedPreferences = context.getSharedPreferences(KEY_SHAREDPREF_KEY, Context.MODE_PRIVATE)
+            sharedPreferences.getBoolean(AppConstants.IS_DARK_MODE, true)
+        }
+        set(value){
+            val sharedPreferences = context.getSharedPreferences(KEY_SHAREDPREF_KEY, Context.MODE_PRIVATE)
+            sharedPreferences.edit().putBoolean(AppConstants.IS_DARK_MODE, value).apply()
         }
 }

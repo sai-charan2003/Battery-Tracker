@@ -94,7 +94,8 @@ object TransparentWidget: GlanceAppWidget() {
                             GetBatteryDetails.showLowBatteryNotificationForHeadPhones(
                                 headphonesName,
                                 headphoneBattery,
-                                context
+                                context,
+                                sharedPref
                             )
                         } else if (headphoneBattery > sharedPref.minHeadphonesBattery.toString()) {
                             sharedPref.isNotificationSentForHeadPhones = false
