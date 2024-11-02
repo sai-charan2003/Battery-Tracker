@@ -67,9 +67,10 @@ import dev.charan.batteryTracker.Screens.components.SettingsItem
 
 import dev.charan.batteryTracker.Utils.PermissionCheck
 import dev.charan.batteryTracker.Utils.SharedPref
-import dev.charan.batteryTracker.data.model.AutoUpdateDTO
-import dev.charan.batteryTracker.data.model.ProcessState
 import dev.charan.batteryTracker.viewModel
+import dev.charan.versiontracker.VersionTracker
+import dev.charan.versiontracker.model.AutoUpdateDTO
+import dev.charan.versiontracker.model.ProcessState
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -142,22 +143,7 @@ fun Settings(navHostController: NavHostController) {
     var isNearByDevicesPermissionEnabled by remember {
         mutableStateOf(PermissionCheck.nearbyDevicePermissionEnabled(context))
     }
-    LaunchedEffect(Unit) {
-        viewmodel.getLatestAppVersionFromAPI()?.observeForever {
-            when(it){
-                is ProcessState.Loading -> {
-                    isFetchingTheData = true
-                }
-                is ProcessState.Success -> {
-                    latestAppVersion = it.autoUpdateDTO
-                    isFetchingTheData = false
-                }
-                else -> {
-                    isFetchingTheData = false
-                }
-            }
-        }
-    }
+
 
 
     val intent = remember {
@@ -514,7 +500,7 @@ fun Settings(navHostController: NavHostController) {
         }
         if(showCheckForUpdate){
             LaunchedEffect(Unit) {
-                viewmodel.getLatestAppVersionFromAPI()?.observeForever {
+                VersionTracker.getLatestAppVersion(appName = "Battery Tracker", apiKey = dev.charan.batteryTracker.BuildConfig.API_KEY)?.observeForever {
                     when(it){
                         is ProcessState.Loading -> {
                             isFetchingTheData = true

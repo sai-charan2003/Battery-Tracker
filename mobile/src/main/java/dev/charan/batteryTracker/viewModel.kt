@@ -24,8 +24,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.charan.batteryTracker.widgets.Material3widget
 import dev.charan.batteryTracker.Utils.GetBatteryDetails
-import dev.charan.batteryTracker.data.model.ProcessState
-import dev.charan.batteryTracker.data.retrofit.RetrofitAPIClient
 import dev.charan.batteryTracker.widgets.TransparentWidget
 import com.google.android.gms.tasks.Tasks
 import com.google.android.gms.wearable.Wearable
@@ -165,6 +163,7 @@ class viewModel(application: Context):ViewModel() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     fun phoneBattery(context: Context) {
         val batteryManager = application.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
         val batteryIntent = application.registerReceiver(
@@ -210,27 +209,7 @@ class viewModel(application: Context):ViewModel() {
         return Tasks.await(Wearable.getNodeClient(context).connectedNodes).map { it.displayName }
     }
 
-    suspend fun getLatestAppVersionFromAPI(): LiveData<ProcessState>? {
-        val processState= MutableLiveData<ProcessState>(ProcessState.Loading)
-        return try {
 
-            val response = RetrofitAPIClient.apiInterface.fetchLatestAppVersion(appName = "Battery Tracker")
-            if (response.isSuccessful) {
-                val data = response.body()
-                processState.postValue(data?.let { ProcessState.Success(it) })
-                processState
-            } else {
-                Log.e("APICall", "Failed to fetch app version. Error code: ${response.code()}")
-                processState.postValue(ProcessState.Error("Unable to fetch the data"))
-                processState
-            }
-        } catch (e: Exception) {
-            Log.e("APICall", "getLatestAppVersionFromAPI: $e")
-            processState.postValue(ProcessState.Error("Unable to fetch the data"))
-            processState
-
-        }
-    }
 
 }
 

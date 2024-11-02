@@ -47,6 +47,7 @@ import dev.charan.batteryTracker.Utils.BatteryWidgetUpdateWorker
 import dev.charan.batteryTracker.Utils.GetBatteryDetails
 import dev.charan.batteryTracker.Utils.SharedPref
 import com.google.android.gms.wearable.Wearable
+import dev.charan.batteryTracker.Utils.GetBatteryDetails.showLowBatteryNotificationForHeadPhones
 import dev.charan.batteryTracker.widgets.components.DeviceBatteryView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -106,21 +107,14 @@ object Material3widget: GlanceAppWidget() {
                 val headphoneBattery = viewModel.bluetoothBattery
                 if(headphoneBattery.isNotEmpty()) {
                     Log.d("TAG", "provideGlance: $headphoneBattery")
-                    if (headphoneBattery <= sharedPref.minHeadphonesBattery.toString() && headphoneBattery!="100") {
+                    handleHeadphoneBatteryNotification(
+                        headphonesName = headphonesName,
+                        headphoneBattery = headphoneBattery,
+                        context = context,
+                        sharedPref = sharedPref
 
-                        if (!sharedPref.isNotificationSentForHeadPhones) {
-                            Log.d("TAG", "provideGlance: ${sharedPref.isNotificationSentForHeadPhones}")
-                            GetBatteryDetails.showLowBatteryNotificationForHeadPhones(
-                                headphonesName,
-                                headphoneBattery,
-                                context,
-                                sharedPref
-                            )
-                        } else if (headphoneBattery > sharedPref.minHeadphonesBattery.toString()) {
-                            Log.d("TAG", "provideGlance: test ")
-                            sharedPref.isNotificationSentForHeadPhones = false
-                        }
-                    }
+                    )
+
                 }
 
 
@@ -190,6 +184,39 @@ object Material3widget: GlanceAppWidget() {
                     }
                 }
             }
+        }
+    }
+    private fun handleHeadphoneBatteryNotification(
+        headphonesName: String,
+        headphoneBattery: String,
+        context: Context,
+        sharedPref: SharedPref
+    ) {
+        val batteryLevel = headphoneBattery.toIntOrNull() ?: return
+        val minBatteryThreshold = sharedPref.minHeadphonesBattery.toString().toIntOrNull() ?: return
+
+        when {
+
+            batteryLevel <= minBatteryThreshold &&
+                    batteryLevel != 100 &&
+                    !sharedPref.isNotificationSentForHeadPhones -> {
+
+                showLowBatteryNotificationForHeadPhones(
+                    headphonesName = headphonesName,
+                    batteryLevel = headphoneBattery,
+                    context = context,
+                    sharedPref = sharedPref
+                )
+
+                sharedPref.isNotificationSentForHeadPhones = true
+            }
+
+
+            batteryLevel > minBatteryThreshold -> {
+                sharedPref.isNotificationSentForHeadPhones = false
+            }
+
+
         }
     }
 }

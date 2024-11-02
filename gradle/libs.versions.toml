@@ -30,6 +30,7 @@ tiles = "1.1.0"
 tilesMaterial = "1.1.0"
 horologistComposeTools = "0.4.8"
 horologistTiles = "0.4.8"
+versionTrackerAndroidLibrary = "0.0.1"
 watchfaceComplicationsDataSourceKtx = "1.1.1"
 
 googleServices = "4.4.0"
@@ -81,6 +82,7 @@ androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecyc
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-material3-android = { module = "androidx.compose.material3:material3-android", version.ref = "material3Android" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }
+version-tracker-android-library = { module = "com.github.sai-charan2003:Version-Tracker-Android-Library", version.ref = "versionTrackerAndroidLibrary" }
 
 
 

@@ -31,6 +31,7 @@ import dev.charan.batteryTracker.Utils.SharedPref
 import dev.charan.batteryTracker.viewModel
 
 import com.google.android.gms.wearable.Wearable
+import dev.charan.batteryTracker.Utils.GetBatteryDetails.showLowBatteryNotificationForHeadPhones
 import dev.charan.batteryTracker.widgets.components.DeviceBatteryView
 
 import kotlinx.coroutines.CoroutineScope
@@ -88,19 +89,14 @@ object TransparentWidget: GlanceAppWidget() {
                 val headphonesName = viewModel.headPhoneName
                 val headphoneBattery = viewModel.bluetoothBattery
                 if(headphoneBattery.isNotEmpty()) {
+                    handleHeadphoneBatteryNotification(
+                        headphonesName = headphonesName,
+                        headphoneBattery=headphoneBattery,
+                        context=context,
+                        sharedPref = sharedPref
+                    )
 
-                    if (headphoneBattery <= sharedPref.minHeadphonesBattery.toString()) {
-                        if (!sharedPref.isNotificationSentForHeadPhones) {
-                            GetBatteryDetails.showLowBatteryNotificationForHeadPhones(
-                                headphonesName,
-                                headphoneBattery,
-                                context,
-                                sharedPref
-                            )
-                        } else if (headphoneBattery > sharedPref.minHeadphonesBattery.toString()) {
-                            sharedPref.isNotificationSentForHeadPhones = false
-                        }
-                    }
+
                 }
 
 
@@ -154,6 +150,40 @@ object TransparentWidget: GlanceAppWidget() {
                     }
 
             }
+        }
+    }
+
+    private fun handleHeadphoneBatteryNotification(
+        headphonesName: String,
+        headphoneBattery: String,
+        context: Context,
+        sharedPref: SharedPref
+    ) {
+        val batteryLevel = headphoneBattery.toIntOrNull() ?: return
+        val minBatteryThreshold = sharedPref.minHeadphonesBattery.toString().toIntOrNull() ?: return
+
+        when {
+
+            batteryLevel <= minBatteryThreshold &&
+                    batteryLevel != 100 &&
+                    !sharedPref.isNotificationSentForHeadPhones -> {
+
+                showLowBatteryNotificationForHeadPhones(
+                    headphonesName = headphonesName,
+                    batteryLevel = headphoneBattery,
+                    context = context,
+                    sharedPref = sharedPref
+                )
+
+                sharedPref.isNotificationSentForHeadPhones = true
+            }
+
+
+            batteryLevel > minBatteryThreshold -> {
+                sharedPref.isNotificationSentForHeadPhones = false
+            }
+
+
         }
     }
 
