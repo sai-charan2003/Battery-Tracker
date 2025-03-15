@@ -1,4 +1,4 @@
-package dev.charan.batteryTracker.Screens.components
+package dev.charan.batteryTracker.presentation.settings.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

@@ -11,8 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import dev.charan.batteryTracker.Screens.HomeScreen
-import dev.charan.batteryTracker.Screens.Settings
+import dev.charan.batteryTracker.presentation.home.HomeScreen
+import dev.charan.batteryTracker.presentation.settings.Settings
 
 
 @RequiresApi(Build.VERSION_CODES.S)

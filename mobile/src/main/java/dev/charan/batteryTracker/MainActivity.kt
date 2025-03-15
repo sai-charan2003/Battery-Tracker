@@ -1,9 +1,9 @@
 package dev.charan.batteryTracker
 
-import Battery_Trackertheme
+
+import BatteryTrackerTheme
 import android.Manifest
 import android.annotation.SuppressLint
-
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -16,11 +16,12 @@ import androidx.core.app.ActivityCompat
 
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
 
 import dev.charan.batteryTracker.Navigation.NavigationApphost
 import dev.charan.batteryTracker.Utils.SharedPref
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 
         }
         setContent {
-            Battery_Trackertheme() {
+            BatteryTrackerTheme {
                 NavigationApphost(navController = rememberNavController())
             }
         }

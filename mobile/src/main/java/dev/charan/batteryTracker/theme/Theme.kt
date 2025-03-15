@@ -34,9 +34,8 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun Battery_Trackertheme(
+fun BatteryTrackerTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {

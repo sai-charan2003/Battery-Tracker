@@ -106,7 +106,6 @@ object Material3widget: GlanceAppWidget() {
                 val headphonesName = viewModel.headPhoneName
                 val headphoneBattery = viewModel.bluetoothBattery
                 if(headphoneBattery.isNotEmpty()) {
-                    Log.d("TAG", "provideGlance: $headphoneBattery")
                     handleHeadphoneBatteryNotification(
                         headphonesName = headphonesName,
                         headphoneBattery = headphoneBattery,

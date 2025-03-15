@@ -10,5 +10,6 @@ object AppConstants {
     const val MIN_HEADPHONE_POWER="min_headphone_power"
     const val IS_NOTIFICATION_ALLOWED = "isNotificationAllowed"
     const val IS_DARK_MODE = "isDarkMode"
+    const val GITHUB_LINK = "https://github.com/sai-charan2003/Battery-Tracker"
 
 }
