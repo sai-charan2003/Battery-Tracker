@@ -24,7 +24,13 @@ import dev.charan.batteryTracker.R
 
 @Composable
 @GlanceComposable
-fun DeviceBatteryView(deviceName:String,deviceBattery:Int,isCharging:Boolean,isLowPowerMode:Boolean,modifier: GlanceModifier){
+fun DeviceBatteryView(
+    deviceName:String,
+    deviceBattery:String,
+    batteryPercentage:Float,
+    isCharging:Boolean,
+    isLowPowerMode:Boolean,
+    modifier: GlanceModifier){
     Row(
         modifier = GlanceModifier.fillMaxWidth().then(modifier),
 
@@ -50,14 +56,14 @@ fun DeviceBatteryView(deviceName:String,deviceBattery:Int,isCharging:Boolean,isL
             if(isLowPowerMode){
 
                 LinearProgressIndicator(
-                    deviceBattery/100f,
+                    batteryPercentage,
                     modifier = GlanceModifier.fillMaxHeight().padding(end = 15.dp, top = 12.dp).size(100.dp).height(21.dp),
                     color = ColorProvider(
                     Color.Yellow), backgroundColor = ColorProvider(Color.LightGray)
                 )
             } else {
                 LinearProgressIndicator(
-                    deviceBattery/100f,
+                    batteryPercentage,
                     modifier = GlanceModifier.fillMaxHeight().padding(end = 15.dp, top = 12.dp).size(100.dp).height(21.dp),
                     color = ColorProvider(
                     Color.Green), backgroundColor = ColorProvider(Color.LightGray)

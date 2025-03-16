@@ -1,6 +1,7 @@
 package dev.charan.batteryTracker.data.model
 
 data class BatteryInfo(
+    val deviceName : String = "",
     val batteryLevel : String = "",
     val batteryPercentage : Float = 0f,
     val remainingCapacity : String = "",

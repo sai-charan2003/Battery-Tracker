@@ -178,7 +178,6 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun changeNotificationState() {
-        Log.d("TAG", "changeNotificationState: changed")
         _state.update { currentState ->
             val newPermissionState = if (!currentState.isNotificationPermissionGranted) {
                 settingsUtils.isNotificationPermissionGranted()

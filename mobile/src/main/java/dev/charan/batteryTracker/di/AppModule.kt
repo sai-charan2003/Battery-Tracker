@@ -8,6 +8,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.charan.batteryTracker.Utils.SettingsUtils
 import dev.charan.batteryTracker.data.Repository.BatteryInfoRepo
+import dev.charan.batteryTracker.data.Repository.WidgetRepository
 import dev.charan.batteryTracker.data.Repository.impl.BatteryInfoRepoImp
 import dev.charan.batteryTracker.data.prefs.SharedPref
 import javax.inject.Singleton
@@ -18,7 +19,7 @@ class AppModule {
     @Provides
     @Singleton
     fun provideBatteryInfoRepo(@ApplicationContext context : Context): BatteryInfoRepo {
-        return BatteryInfoRepoImp(context)
+        return BatteryInfoRepoImp(context, provideSharedPref(context))
     }
 
     @Provides
@@ -32,5 +33,11 @@ class AppModule {
     fun provideSettingsUtils(@ApplicationContext context : Context): SettingsUtils {
         return SettingsUtils(context)
     }
+
+//    @Provides
+//    @Singleton
+//    fun provideWidgetRepository(@ApplicationContext context : Context): WidgetRepository {
+//        return WidgetRepository()
+//    }
 
 }
