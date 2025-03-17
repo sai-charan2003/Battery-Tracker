@@ -1,4 +1,4 @@
-package dev.charan.batteryTracker.Utils
+package dev.charan.batteryTracker.utils
 
 object AppConstants {
     const val WEAROS_CHARGING_DIVIDER="ischarging"

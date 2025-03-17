@@ -12,7 +12,7 @@ import androidx.glance.GlanceTheme
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.provideContent
-import androidx.hilt.navigation.compose.hiltViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import dev.charan.batteryTracker.data.Repository.WidgetRepository
 import dev.charan.batteryTracker.data.model.BatteryInfo
 import dev.charan.batteryTracker.data.model.BluetoothDeviceBatteryInfo
@@ -34,8 +34,7 @@ object TransparentWidget: GlanceAppWidget() {
 }
 
 
-
-
+@AndroidEntryPoint
 class TransparentReceiver: GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget
         get() = TransparentWidget

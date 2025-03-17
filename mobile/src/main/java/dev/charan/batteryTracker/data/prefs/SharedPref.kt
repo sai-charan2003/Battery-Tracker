@@ -1,15 +1,13 @@
 package dev.charan.batteryTracker.data.prefs
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
-import dev.charan.batteryTracker.Utils.AppConstants
-import dev.charan.batteryTracker.Utils.SharedPref
-import dev.charan.batteryTracker.Utils.SharedPref.Companion
+import dev.charan.batteryTracker.utils.AppConstants
+import dev.charan.batteryTracker.utils.SharedPref
 import androidx.core.content.edit
 
 class SharedPref(private val context : Context) {

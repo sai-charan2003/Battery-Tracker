@@ -1,4 +1,4 @@
-package dev.charan.batteryTracker.Utils
+package dev.charan.batteryTracker.utils
 
 import android.content.Context
 import android.content.Intent
@@ -18,29 +18,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class PhoneListenerService: WearableListenerService() {
-
-
-
-
     val scope = CoroutineScope(Dispatchers.IO)
     override fun onMessageReceived(messageEvent: MessageEvent) {
-
         Log.d(TAG, String(messageEvent.data))
-
     }
 
 
     override fun onCreate() {
-
-
-
-
         super.onCreate()
         val battery= getBatteryPercentage(applicationContext)
         val stringbattery=battery.toString()
         val devicename= Build.DEVICE
-
-
         val batteryIntent =
             applicationContext.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
         val chargingstatus=batteryIntent!!.getIntExtra(BatteryManager.EXTRA_STATUS,0)

@@ -19,7 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 
 import dev.charan.batteryTracker.Navigation.NavigationApphost
-import dev.charan.batteryTracker.Utils.SharedPref
+import dev.charan.batteryTracker.utils.SharedPref
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

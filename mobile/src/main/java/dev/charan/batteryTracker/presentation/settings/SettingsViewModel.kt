@@ -1,11 +1,7 @@
 package dev.charan.batteryTracker.presentation.settings
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Build
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.charan.batteryTracker.data.prefs.SharedPref
@@ -13,11 +9,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
-import androidx.core.net.toUri
-import androidx.glance.action.actionStartActivity
 import androidx.lifecycle.viewModelScope
-import dev.charan.batteryTracker.Utils.AppConstants
-import dev.charan.batteryTracker.Utils.SettingsUtils
+import dev.charan.batteryTracker.utils.AppConstants
+import dev.charan.batteryTracker.utils.SettingsUtils
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch

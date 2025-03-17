@@ -12,7 +12,6 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
 import dev.charan.batteryTracker.data.model.BatteryInfo
 import dev.charan.batteryTracker.data.model.BluetoothDeviceBatteryInfo
-import dev.charan.batteryTracker.widgets.WidgetState
 
 @GlanceComposable
 @Composable

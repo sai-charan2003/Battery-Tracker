@@ -14,26 +14,22 @@ import android.os.PowerManager
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
-import androidx.lifecycle.viewModelScope
 import com.google.android.gms.tasks.Tasks
 import com.google.android.gms.wearable.Wearable
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dev.charan.batteryTracker.Utils.AppConstants
-import dev.charan.batteryTracker.Utils.BatteryUtils.getChargingStatus
-import dev.charan.batteryTracker.Utils.BatteryUtils.getHealthData
-import dev.charan.batteryTracker.Utils.BatteryUtils.getPluggedType
+import dev.charan.batteryTracker.utils.AppConstants
+import dev.charan.batteryTracker.utils.BatteryUtils.getChargingStatus
+import dev.charan.batteryTracker.utils.BatteryUtils.getHealthData
+import dev.charan.batteryTracker.utils.BatteryUtils.getPluggedType
 import dev.charan.batteryTracker.data.Repository.BatteryInfoRepo
 import dev.charan.batteryTracker.data.model.BatteryInfo
 import dev.charan.batteryTracker.data.model.BluetoothDeviceBatteryInfo
 import dev.charan.batteryTracker.data.prefs.SharedPref
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class BatteryInfoRepoImp @Inject constructor(

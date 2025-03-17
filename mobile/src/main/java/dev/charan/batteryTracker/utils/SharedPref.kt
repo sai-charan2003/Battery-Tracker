@@ -1,10 +1,9 @@
-package dev.charan.batteryTracker.Utils
+package dev.charan.batteryTracker.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.core.content.ContextCompat
 
 class SharedPref(private val context: Context) {

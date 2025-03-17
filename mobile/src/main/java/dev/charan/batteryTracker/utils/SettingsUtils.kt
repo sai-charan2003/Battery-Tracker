@@ -1,4 +1,4 @@
-package dev.charan.batteryTracker.Utils
+package dev.charan.batteryTracker.utils
 
 import android.Manifest
 import android.content.Context
