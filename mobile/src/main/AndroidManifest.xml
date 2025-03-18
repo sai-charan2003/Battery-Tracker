@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:name=".BatteryTrackerApplication"
         android:enableOnBackInvokedCallback="true"
-        android:theme="@style/Theme.Battery_Tracker"
+        android:theme="@style/Theme.MyApp.MySplash"
         tools:targetApi="tiramisu">
         <provider
             android:name="androidx.startup.InitializationProvider"

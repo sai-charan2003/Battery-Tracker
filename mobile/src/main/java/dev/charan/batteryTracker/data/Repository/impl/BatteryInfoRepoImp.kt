@@ -48,6 +48,9 @@ class BatteryInfoRepoImp @Inject constructor(
 
     override fun registerBatteryReceiver() {
         if (batteryReceiver != null) return
+        Log.d("TAG", "registerBatteryReceiver: from register battery")
+        updateBatteryInfo()
+
 
         batteryReceiver = object : BroadcastReceiver() {
             @RequiresApi(Build.VERSION_CODES.R)
@@ -74,6 +77,7 @@ class BatteryInfoRepoImp @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.P)
     private fun updateBatteryInfo() {
+        Log.d("TAG", "updateBatteryInfo: from update battery")
 
         val batteryLevel = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
         val batteryStatus = batteryIntent?.getIntExtra(BatteryManager.EXTRA_STATUS, 0).getChargingStatus()

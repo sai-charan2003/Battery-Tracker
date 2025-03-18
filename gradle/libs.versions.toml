@@ -43,6 +43,7 @@ firebaseDatabase = "21.0.0"
 workRuntime = "2.10.0"
 lifecycleRuntimeKtx = "2.7.0"
 aboutlibrariesCore = "11.2.3"
+splash-screen = "1.0.0"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
@@ -94,6 +95,8 @@ version-tracker-android-library = { module = "com.github.sai-charan2003:Version-
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltAndroid" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+aboutlibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "aboutlibrariesCore" }
+splash-screen = { module = "androidx.core:core-splashscreen", version.ref = "splash-screen" }
 
 
 

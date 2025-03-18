@@ -46,6 +46,7 @@ import javax.inject.Inject
 object Material3widget: GlanceAppWidget() {
     @RequiresApi(Build.VERSION_CODES.R)
 
+
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val repo = WidgetRepository.get(context)
         provideContent {
@@ -82,9 +83,8 @@ object Material3widget: GlanceAppWidget() {
         widgetRepository: WidgetRepository
     ) {
 
-        val phoneBatteryInfo by widgetRepository.batteryData().collectAsState(null)
-        val headPhoneBatteryInfo by widgetRepository.bluetoothBatteryData().collectAsState(null)
-        Log.d("TAG", "Material3WidgetContent: $phoneBatteryInfo")
+        val batteryState by widgetRepository.allDevicesBatteryData().collectAsState(null)
+        Log.d("TAG", "Material3WidgetContent: $batteryState")
         Scaffold(
             titleBar = {
                 Text(
@@ -110,8 +110,8 @@ object Material3widget: GlanceAppWidget() {
 
         ) {
             WidgetContent(
-                phoneBatteryState = phoneBatteryInfo ?: BatteryInfo(),
-                bluetoothBatteryState = headPhoneBatteryInfo ?: BluetoothDeviceBatteryInfo(),
+                phoneBatteryState = batteryState?.deviceBattery ?: BatteryInfo(),
+                bluetoothBatteryState = batteryState?.bluetoothBattery ?: BluetoothDeviceBatteryInfo(),
                 GlanceModifier.background(GlanceTheme.colors.surface)
                 )
         }

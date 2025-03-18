@@ -27,9 +27,16 @@ class BatteryWidgetUpdateWorker @AssistedInject constructor(
     override suspend fun doWork(): Result {
         Log.d("TAG", "doWork: start")
         val widgetRepository = WidgetRepository.get(context)
-        Material3widget.updateAll(context)
-        TransparentWidget.updateAll(context)
-        return Result.success()
+        widgetRepository.startObserving()
+        try {
+            Material3widget.updateAll(context)
+            TransparentWidget.updateAll(context)
+            return Result.success()
+        } catch (e:Exception){
+            Log.d("TAG", "doWork: ${e.message}")
+            return Result.failure()
+        }
+
     }
 
     companion object {

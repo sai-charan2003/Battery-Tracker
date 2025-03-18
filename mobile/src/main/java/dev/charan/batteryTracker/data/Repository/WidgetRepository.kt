@@ -14,7 +14,9 @@ import dev.charan.batteryTracker.data.model.BluetoothDeviceBatteryInfo
 import dev.charan.batteryTracker.data.prefs.SharedPref
 import dev.charan.batteryTracker.widgets.Material3widget
 import dev.charan.batteryTracker.widgets.TransparentWidget
+import dev.charan.batteryTracker.widgets.WidgetState
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -29,6 +31,9 @@ class WidgetRepository @Inject constructor(
     interface WidgetRepositoryEntryPoint {
         fun widgetModelRepository(): WidgetRepository
     }
+    init {
+        startObserving()
+    }
 
     companion object {
         fun get(applicationContext: Context): WidgetRepository {
@@ -41,6 +46,7 @@ class WidgetRepository @Inject constructor(
     }
 
     fun startObserving() {
+        Log.d("TAG", "startObserving: from observe")
         batteryInfoRepo.registerBatteryReceiver()
         batteryInfoRepo.registerWearOsBatteryReceiver()
         batteryInfoRepo.registerBluetoothBatteryReceiver()
@@ -53,6 +59,20 @@ class WidgetRepository @Inject constructor(
 
     fun bluetoothBatteryData() : Flow<BluetoothDeviceBatteryInfo?> =
         batteryInfoRepo.getBluetoothBatteryDetails()
+
+    fun allDevicesBatteryData(): Flow<WidgetState> {
+        Log.d("TAG", "allDevicesBatteryData: from devicebattery")
+        return combine(
+            batteryInfoRepo.getBatteryDetails(),
+            batteryInfoRepo.getBluetoothBatteryDetails()
+        ) { battery, bluetoothBattery ->
+            WidgetState(
+                deviceBattery = battery ?: BatteryInfo(),
+                bluetoothBattery = bluetoothBattery ?: BluetoothDeviceBatteryInfo()
+            )
+        }
+    }
+
 
 
 
