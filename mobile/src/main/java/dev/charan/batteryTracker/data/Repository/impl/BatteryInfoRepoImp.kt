@@ -144,11 +144,13 @@ class BatteryInfoRepoImp @Inject constructor(
                 headPhoneBatteryLevel = headPhoneBattery
                 hasHeadPhones = true
             }
-            if(it !=null && it.bluetoothClass.majorDeviceClass == BluetoothClass.Device.Major.WEARABLE){
-                wearOsName = it.alias.toString()
+            if(it.bluetoothClass.majorDeviceClass == BluetoothClass.Device.Major.WEARABLE){
                 sendSignalToWearOs()
+                wearOsName = it.alias.toString()
+
             }
         }
+
 
         bluetoothBatteryInfo.update {
             it.copy(
@@ -176,10 +178,12 @@ class BatteryInfoRepoImp @Inject constructor(
                     "".toByteArray()
                 ).apply {
                     addOnSuccessListener {
+                        Log.d("TAG", "sendSignalToWearOs: sent")
 
 
                     }
                     addOnFailureListener {
+                        Log.d("TAG", "sendSignalToWearOs: $it")
 
                     }
                 }
