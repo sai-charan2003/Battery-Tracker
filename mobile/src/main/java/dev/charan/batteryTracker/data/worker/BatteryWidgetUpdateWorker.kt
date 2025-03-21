@@ -12,7 +12,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import dev.charan.batteryTracker.data.Repository.WidgetRepository
+import dev.charan.batteryTracker.data.repository.WidgetRepository
 import dev.charan.batteryTracker.utils.AppConstants
 import dev.charan.batteryTracker.widgets.Material3widget
 import dev.charan.batteryTracker.widgets.TransparentWidget
@@ -26,8 +26,6 @@ class BatteryWidgetUpdateWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         Log.d("TAG", "doWork: start")
-        val widgetRepository = WidgetRepository.get(context)
-        widgetRepository.startObserving()
         try {
             Material3widget.updateAll(context)
             TransparentWidget.updateAll(context)

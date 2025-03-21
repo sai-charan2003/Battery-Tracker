@@ -1,4 +1,4 @@
-package dev.charan.batteryTracker.data.Repository
+package dev.charan.batteryTracker.data.repository
 
 import dev.charan.batteryTracker.data.model.BatteryInfo
 import dev.charan.batteryTracker.data.model.BluetoothDeviceBatteryInfo
@@ -12,4 +12,6 @@ interface BatteryInfoRepo {
     fun getBluetoothBatteryDetails() : Flow<BluetoothDeviceBatteryInfo?>
     fun registerWearOsBatteryReceiver()
     fun registerBluetoothBatteryReceiver()
+    fun getPhoneBatteryData() : BatteryInfo
+    fun getBluetoothBattery() : BluetoothDeviceBatteryInfo
 }

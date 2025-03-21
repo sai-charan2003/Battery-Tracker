@@ -1,4 +1,4 @@
-package dev.charan.batteryTracker.data.Repository.impl
+package dev.charan.batteryTracker.data.repository.impl
 
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
@@ -21,7 +21,7 @@ import dev.charan.batteryTracker.utils.AppConstants
 import dev.charan.batteryTracker.utils.BatteryUtils.getChargingStatus
 import dev.charan.batteryTracker.utils.BatteryUtils.getHealthData
 import dev.charan.batteryTracker.utils.BatteryUtils.getPluggedType
-import dev.charan.batteryTracker.data.Repository.BatteryInfoRepo
+import dev.charan.batteryTracker.data.repository.BatteryInfoRepo
 import dev.charan.batteryTracker.data.model.BatteryInfo
 import dev.charan.batteryTracker.data.model.BluetoothDeviceBatteryInfo
 import dev.charan.batteryTracker.data.prefs.SharedPref
@@ -47,16 +47,11 @@ class BatteryInfoRepoImp @Inject constructor(
     private val bluetoothBatteryInfo = MutableStateFlow<BluetoothDeviceBatteryInfo>(BluetoothDeviceBatteryInfo())
 
     override fun registerBatteryReceiver() {
-        if (batteryReceiver != null) return
-        Log.d("TAG", "registerBatteryReceiver: from register battery")
-        updateBatteryInfo()
-
-
         batteryReceiver = object : BroadcastReceiver() {
             @RequiresApi(Build.VERSION_CODES.R)
             override fun onReceive(context: Context, intent: Intent?) {
                 Log.d("TAG", "onReceive: battery status changed")
-                updateBatteryInfo()
+                getPhoneBatteryData()
             }
         }
 
@@ -76,7 +71,7 @@ class BatteryInfoRepoImp @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
-    private fun updateBatteryInfo() {
+    override fun getPhoneBatteryData(): BatteryInfo {
         Log.d("TAG", "updateBatteryInfo: from update battery")
 
         val batteryLevel = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
@@ -98,6 +93,11 @@ class BatteryInfoRepoImp @Inject constructor(
             isLowPowerMode = powerManager?.isPowerSaveMode == true,
             batteryType = batteryIntent?.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY).toString()
         )
+        return batteryInfoFlow.value ?: BatteryInfo()
+    }
+
+    override fun getBluetoothBattery(): BluetoothDeviceBatteryInfo {
+        return BluetoothDeviceBatteryInfo()
     }
 
     @RequiresApi(Build.VERSION_CODES.P)

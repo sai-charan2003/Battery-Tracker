@@ -1,17 +1,16 @@
 package dev.charan.batteryTracker.widgets
 
-import android.appwidget.AppWidgetManager
 import android.content.Context
 
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
-import androidx.datastore.core.DataStore
 
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -23,19 +22,17 @@ import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
 
 import androidx.glance.background
-import androidx.glance.currentState
 
 import androidx.glance.layout.fillMaxSize
 
 import androidx.glance.layout.padding
-import androidx.glance.state.GlanceStateDefinition
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import dagger.hilt.android.AndroidEntryPoint
 
 
-import dev.charan.batteryTracker.data.Repository.WidgetRepository
+import dev.charan.batteryTracker.data.repository.WidgetRepository
 import dev.charan.batteryTracker.data.model.BatteryInfo
 import dev.charan.batteryTracker.data.model.BluetoothDeviceBatteryInfo
 import dev.charan.batteryTracker.data.worker.BatteryWidgetUpdateWorker
@@ -49,6 +46,7 @@ object Material3widget: GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val repo = WidgetRepository.get(context)
+
         provideContent {
             GlanceTheme {
                 Log.d("TAG", "provideGlance: updated")
@@ -64,16 +62,16 @@ object Material3widget: GlanceAppWidget() {
         @Inject
         lateinit var  widgetRepository : WidgetRepository
 
-        override fun onDisabled(context: Context?) {
-            widgetRepository.cleanUp()
-        }
-
-        override fun onEnabled(context: Context?) {
-            super.onEnabled(context)
-            widgetRepository.startObserving()
-            BatteryWidgetUpdateWorker.setup(context!!)
-
-        }
+//        override fun onDisabled(context: Context?) {
+//            widgetRepository.cleanUp()
+//        }
+//
+//        override fun onEnabled(context: Context?) {
+//            super.onEnabled(context)
+//            widgetRepository.startObserving()
+//            BatteryWidgetUpdateWorker.setup(context!!)
+//
+//        }
 
     }
 
@@ -83,7 +81,7 @@ object Material3widget: GlanceAppWidget() {
         widgetRepository: WidgetRepository
     ) {
 
-        val batteryState by widgetRepository.allDevicesBatteryData().collectAsState(null)
+        val batteryState = widgetRepository.batteryData()
         Log.d("TAG", "Material3WidgetContent: $batteryState")
         Scaffold(
             titleBar = {
@@ -110,8 +108,8 @@ object Material3widget: GlanceAppWidget() {
 
         ) {
             WidgetContent(
-                phoneBatteryState = batteryState?.deviceBattery ?: BatteryInfo(),
-                bluetoothBatteryState = batteryState?.bluetoothBattery ?: BluetoothDeviceBatteryInfo(),
+                phoneBatteryState = batteryState,
+                bluetoothBatteryState = BluetoothDeviceBatteryInfo(),
                 GlanceModifier.background(GlanceTheme.colors.surface)
                 )
         }

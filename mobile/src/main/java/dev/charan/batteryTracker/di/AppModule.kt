@@ -8,9 +8,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.charan.batteryTracker.utils.SettingsUtils
-import dev.charan.batteryTracker.data.Repository.BatteryInfoRepo
-import dev.charan.batteryTracker.data.Repository.WidgetRepository
-import dev.charan.batteryTracker.data.Repository.impl.BatteryInfoRepoImp
+import dev.charan.batteryTracker.data.repository.BatteryInfoRepo
+import dev.charan.batteryTracker.data.repository.WidgetRepository
+import dev.charan.batteryTracker.data.repository.impl.BatteryInfoRepoImp
 import dev.charan.batteryTracker.data.prefs.SharedPref
 import javax.inject.Singleton
 

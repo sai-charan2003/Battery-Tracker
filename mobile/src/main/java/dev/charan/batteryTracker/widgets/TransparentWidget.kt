@@ -13,7 +13,7 @@ import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.provideContent
 import dagger.hilt.android.AndroidEntryPoint
-import dev.charan.batteryTracker.data.Repository.WidgetRepository
+import dev.charan.batteryTracker.data.repository.WidgetRepository
 import dev.charan.batteryTracker.data.model.BatteryInfo
 import dev.charan.batteryTracker.data.model.BluetoothDeviceBatteryInfo
 import dev.charan.batteryTracker.widgets.components.WidgetContent
@@ -56,13 +56,13 @@ fun TransparentWidgetContent(
     widgetRepository: WidgetRepository
 
 ) {
-    val phoneBatteryInfo by widgetRepository.batteryData().collectAsState(null)
-    val headPhoneBatteryInfo by widgetRepository.bluetoothBatteryData().collectAsState(null)
-
-    WidgetContent(
-        phoneBatteryState = phoneBatteryInfo ?: BatteryInfo(),
-        bluetoothBatteryState = headPhoneBatteryInfo ?: BluetoothDeviceBatteryInfo(),
-    )
+//    val phoneBatteryInfo by widgetRepository.batteryData().collectAsState(null)
+//    val headPhoneBatteryInfo by widgetRepository.bluetoothBatteryData().collectAsState(null)
+//
+//    WidgetContent(
+//        phoneBatteryState = phoneBatteryInfo ?: BatteryInfo(),
+//        bluetoothBatteryState = headPhoneBatteryInfo ?: BluetoothDeviceBatteryInfo(),
+//    )
 
 
 }

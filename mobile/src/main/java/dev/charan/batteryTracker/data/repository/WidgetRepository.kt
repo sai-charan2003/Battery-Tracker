@@ -1,9 +1,8 @@
-package dev.charan.batteryTracker.data.Repository
+package dev.charan.batteryTracker.data.repository
 
 import android.content.Context
 import android.util.Log
 import androidx.glance.appwidget.GlanceAppWidgetManager
-import androidx.glance.appwidget.updateAll
 import dagger.hilt.EntryPoint
 import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn
@@ -53,8 +52,8 @@ class WidgetRepository @Inject constructor(
 
     }
 
-    fun batteryData() : Flow<BatteryInfo?> =
-         batteryInfoRepo.getBatteryDetails()
+    fun batteryData() : BatteryInfo =
+         batteryInfoRepo.getPhoneBatteryData()
 
 
     fun bluetoothBatteryData() : Flow<BluetoothDeviceBatteryInfo?> =
