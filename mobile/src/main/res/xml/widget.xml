@@ -6,6 +6,7 @@
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen"
     android:updatePeriodMillis="1960000"
+    android:previewImage="@drawable/material3widgetpreview"
 
 
     >

@@ -4,8 +4,7 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+
 
 import androidx.glance.GlanceId
 import androidx.glance.GlanceTheme
@@ -14,9 +13,6 @@ import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.provideContent
 import dagger.hilt.android.AndroidEntryPoint
 import dev.charan.batteryTracker.data.repository.WidgetRepository
-import dev.charan.batteryTracker.data.model.BatteryInfo
-import dev.charan.batteryTracker.data.model.BluetoothDeviceBatteryInfo
-import dev.charan.batteryTracker.widgets.components.WidgetContent
 import javax.inject.Inject
 
 

@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:description="@string/Material_3"
+    android:description="@string/transparent"
     android:minWidth="500dp"
-    android:minHeight="50dp"
+    android:minHeight="100dp"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen"
     android:updatePeriodMillis="1960000"
-
-
-    >
+    android:previewImage="@layout/activity_main">
 
 </appwidget-provider>
-
-
