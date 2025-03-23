@@ -25,7 +25,6 @@ class BatteryWidgetUpdateWorker @AssistedInject constructor(
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
-        Log.d("TAG", "doWork: start")
         try {
             Material3widget.updateAll(context)
             TransparentWidget.updateAll(context)

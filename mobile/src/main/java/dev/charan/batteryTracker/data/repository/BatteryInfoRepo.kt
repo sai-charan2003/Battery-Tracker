@@ -12,6 +12,8 @@ interface BatteryInfoRepo {
     fun getBluetoothBatteryDetails() : Flow<BluetoothDeviceBatteryInfo?>
     fun registerWearOsBatteryReceiver()
     fun registerBluetoothBatteryReceiver()
+    fun getHeadPhoneBatteryInfo() : BluetoothDeviceBatteryInfo
     fun getPhoneBatteryData() : BatteryInfo
     fun getBluetoothBattery() : BluetoothDeviceBatteryInfo
+    suspend fun sendSignalToWearOs()
 }

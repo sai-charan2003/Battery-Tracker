@@ -42,7 +42,7 @@ fun WidgetContent(
 
             if (bluetoothBatteryState.isWearOsConnected) {
                 DeviceBatteryView(
-                    deviceName = bluetoothBatteryState.wearosBatteryLevel,
+                    deviceName = if(bluetoothBatteryState.wearOsDeviceName.isNullOrEmpty().not()) bluetoothBatteryState.wearOsDeviceName else "Wear os",
                     deviceBattery = bluetoothBatteryState.wearosBatteryLevel,
                     isCharging = bluetoothBatteryState.isWearOsCharging,
                     batteryPercentage = bluetoothBatteryState.wearOsBatteryPercentage,

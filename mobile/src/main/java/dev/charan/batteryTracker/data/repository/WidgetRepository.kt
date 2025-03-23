@@ -16,6 +16,7 @@ import dev.charan.batteryTracker.widgets.TransparentWidget
 import dev.charan.batteryTracker.widgets.WidgetState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -59,17 +60,12 @@ class WidgetRepository @Inject constructor(
     fun bluetoothBatteryData() : Flow<BluetoothDeviceBatteryInfo?> =
         batteryInfoRepo.getBluetoothBatteryDetails()
 
-    fun allDevicesBatteryData(): Flow<WidgetState> {
-        Log.d("TAG", "allDevicesBatteryData: from devicebattery")
-        return combine(
-            batteryInfoRepo.getBatteryDetails(),
-            batteryInfoRepo.getBluetoothBatteryDetails()
-        ) { battery, bluetoothBattery ->
-            WidgetState(
-                deviceBattery = battery ?: BatteryInfo(),
-                bluetoothBattery = bluetoothBattery ?: BluetoothDeviceBatteryInfo()
-            )
-        }
+    suspend fun allDevicesBatteryData(): WidgetState {
+        batteryInfoRepo.sendSignalToWearOs()
+        return WidgetState(
+            deviceBattery = batteryInfoRepo.getPhoneBatteryData(),
+            bluetoothBattery = batteryInfoRepo.getBluetoothBatteryDetails().first() ?: BluetoothDeviceBatteryInfo()
+        )
     }
 
 

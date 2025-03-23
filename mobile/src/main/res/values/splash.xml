@@ -4,7 +4,7 @@
     <style name="Theme.MyApp.MySplash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">#FFFFFF</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/splash</item>
-        <item name="postSplashScreenTheme">@style/Theme.Battery_Tracker</item>
+        <item name="postSplashScreenTheme">@style/Base.Theme.Battery_Tracker</item>
     </style>
 
 

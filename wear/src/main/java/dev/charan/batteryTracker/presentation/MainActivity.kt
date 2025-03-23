@@ -50,6 +50,7 @@ import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
 import dev.charan.batteryTracker.R
 import com.google.android.gms.tasks.Tasks
+import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
 import com.google.android.gms.wearable.WearableListenerService
 import dev.charan.batteryTracker.presentation.theme.Battery_TrackerTheme
@@ -241,6 +242,10 @@ fun Greeting(greetingName: String) {
 class PhoneListenerService: WearableListenerService() {
 
     val scope = CoroutineScope(Dispatchers.IO)
+    override fun onMessageReceived(p0: MessageEvent) {
+        super.onMessageReceived(p0)
+        Log.d("TAG", "onMessageReceived: ${p0.data}")
+    }
 
 
 
