@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.hilt.android)
+    id("kotlin-kapt")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -45,6 +48,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    hilt { enableAggregatingTask = false }
     buildTypes {
         debug {
             applicationIdSuffix = ".debug"
@@ -77,6 +81,10 @@ dependencies {
     implementation(libs.androidx.tiles.material)
     implementation(libs.horologist.compose.tools)
     implementation(libs.horologist.tiles)
+    implementation (libs.hilt.android)
+    kapt (libs.hilt.compiler)
+    implementation (libs.androidx.hilt.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
 //    implementation(libs.androidx.material.icons.core)
     implementation(libs.androidx.watchface.complications.data.source.ktx)
     androidTestImplementation(platform(libs.androidx.compose.bom))

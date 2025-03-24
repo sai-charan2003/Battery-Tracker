@@ -135,6 +135,7 @@ dependencies {
     implementation (libs.accompanist.permissions)
     implementation (libs.androidx.hilt.work)
     implementation(libs.splash.screen)
+    implementation(libs.kotlinx.serialization.json)
 
 
 

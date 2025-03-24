@@ -25,6 +25,7 @@ import dev.charan.batteryTracker.data.repository.BatteryInfoRepo
 import dev.charan.batteryTracker.data.model.BatteryInfo
 import dev.charan.batteryTracker.data.model.BluetoothDeviceBatteryInfo
 import dev.charan.batteryTracker.data.prefs.SharedPref
+import dev.charan.batteryTracker.utils.convertToBatteryModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -117,33 +118,31 @@ class BatteryInfoRepoImp @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.R)
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     override fun registerWearOsBatteryReceiver() {
-        var wearOsString = ""
+        var wearOSBatteryData = BatteryInfo()
         var isWearOsConnected = false
-        var wearOsName = ""
+        var wearOsName : String? = null
         Wearable.getMessageClient(context).addListener {
-            Log.d("TAG", "registerWearOsBatteryReceiver: $it")
-            wearOsString = String(it.data)
-            Log.d("TAG", "registerWearOsBatteryReceiver: $wearOsString")
-            val wearosBattery = wearOsString.substringBefore(AppConstants.WEAROS_CHARGING_DIVIDER)
-            val isWearosCharging = wearOsString.substringAfter(AppConstants.WEAROS_CHARGING_DIVIDER).toBoolean()
-            if(wearosBattery.isNullOrEmpty().not()){
+
+            wearOSBatteryData = String(it.data).convertToBatteryModel()
+            Log.d("TAG", "registerWearOsBatteryReceiver: $wearOSBatteryData")
+            if(wearOSBatteryData.batteryLevel.isNullOrEmpty().not()){
                 isWearOsConnected = true
                 val pariedDevices : List<BluetoothDevice> = bluetoothAdapter.bondedDevices.filter { it.bluetoothClass.majorDeviceClass == BluetoothClass.Device.Major.AUDIO_VIDEO }
                 pariedDevices.forEach {
                     if(it.bluetoothClass.majorDeviceClass == BluetoothClass.Device.Major.WEARABLE){
-                        wearOsName = it.alias.toString()
-                        Log.d("TAG", "registerWearOsBatteryReceiver: $wearOsName")
+                        wearOsName = it.alias
+
                     }
                 }
             }
-            Log.d("TAG", "registerWearOsBatteryReceiver: $wearosBattery")
+
             bluetoothBatteryInfo.update {
                 it.copy(
-                    wearOsDeviceName = wearOsName,
-                    wearosBatteryLevel = wearosBattery,
+                    wearOsDeviceName = wearOsName ?: wearOSBatteryData.deviceName,
+                    wearosBatteryLevel = wearOSBatteryData.batteryLevel,
                     isWearOsConnected = isWearOsConnected,
-                    isWearOsCharging = isWearosCharging,
-                    wearOsBatteryPercentage = wearosBattery.toFloatOrNull()?.div(100) ?: 0f
+                    isWearOsCharging = wearOSBatteryData.isCharging,
+                    wearOsBatteryPercentage = wearOSBatteryData.batteryPercentage
                 )
             }
         }

@@ -15,9 +15,7 @@ import dev.charan.batteryTracker.data.model.BatteryInfo
 fun BatteryInfoCard(batteryState : BatteryInfo) {
     Log.d("TAG", "BatteryInfoCard: $batteryState")
     ElevatedCard(
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 5.dp
-        ),
+
         modifier = Modifier
             .fillMaxSize()
             .padding(10.dp)

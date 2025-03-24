@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import dev.charan.batteryTracker.PhoneListenerService
 import dev.charan.batteryTracker.utils.SettingsUtils
 import dev.charan.batteryTracker.data.repository.BatteryInfoRepo
 import dev.charan.batteryTracker.data.repository.WidgetRepository
@@ -49,5 +50,6 @@ class AppModule {
     fun provideWorkManager(@ApplicationContext context: Context): WorkManager {
         return WorkManager.getInstance(context)
     }
+
 
 }

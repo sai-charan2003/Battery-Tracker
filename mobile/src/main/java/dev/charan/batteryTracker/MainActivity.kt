@@ -24,22 +24,13 @@ import dev.charan.batteryTracker.utils.SharedPref
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
     @RequiresApi(Build.VERSION_CODES.S)
-
-    @SuppressLint("UnrememberedMutableState")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         enableEdgeToEdge()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.BLUETOOTH_CONNECT),2)
-        if(SharedPref.getInstance(this).isDarkModeEnabled){
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else{
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-
-        }
         setContent {
             BatteryTrackerTheme {
                 NavigationApphost(navController = rememberNavController())
