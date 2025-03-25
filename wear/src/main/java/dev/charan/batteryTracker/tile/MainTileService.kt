@@ -3,6 +3,7 @@ package dev.charan.batteryTracker.tile
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.protolayout.ColorBuilders.argb
 import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.ResourceBuilders
@@ -58,6 +59,7 @@ private fun tileLayout(context: Context): LayoutElementBuilders.LayoutElement {
 
 
 @Composable
+@Preview
 fun TilePreview() {
     LayoutRootPreview(root = tileLayout(LocalContext.current))
 }

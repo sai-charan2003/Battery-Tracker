@@ -136,6 +136,8 @@ dependencies {
     implementation (libs.androidx.hilt.work)
     implementation(libs.splash.screen)
     implementation(libs.kotlinx.serialization.json)
+    implementation (libs.aboutlibraries.core)
+    implementation(libs.aboutlibraries.compose.m3)
 
 
 

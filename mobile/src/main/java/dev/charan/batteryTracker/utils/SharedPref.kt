@@ -9,16 +9,6 @@ import androidx.core.content.ContextCompat
 class SharedPref(private val context: Context) {
     companion object{
         const val KEY_SHAREDPREF_KEY="key_sharedpref_key"
-        @SuppressLint("StaticFieldLeak")
-        @Volatile
-        private var instance: SharedPref? = null
-
-        fun getInstance(context: Context): SharedPref {
-            return instance ?: synchronized(this) {
-                instance ?: SharedPref(context).also { instance = it }
-            }
-        }
-
     }
     var isNotificationSent
         get() = run {

@@ -1,4 +1,4 @@
-package dev.charan.batteryTracker.Navigation
+package dev.charan.batteryTracker.presentation.navigation
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -12,19 +12,18 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import dev.charan.batteryTracker.presentation.home.HomeScreen
-import dev.charan.batteryTracker.presentation.settings.Settings
+import dev.charan.batteryTracker.presentation.settings.LicenseScreen
+import dev.charan.batteryTracker.presentation.settings.SettingsScreen
 
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
 
 
-fun NavigationApphost(navController: NavHostController){
-
-
+fun NavigationAppHost(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = dev.charan.batteryTracker.Navigation.Destination.Home.route,
+        startDestination = HomeScreenNav,
         enterTransition = {
             fadeIn() + slideIntoContainer(
                 SlideDirection.Start,
@@ -52,15 +51,17 @@ fun NavigationApphost(navController: NavHostController){
                 targetOffset = { 100 },
                 animationSpec = (tween(easing = LinearEasing, durationMillis = 200))
             )
-        },){
-        composable(route= Destination.Home.route){
+        },
+    ) {
+        composable<HomeScreenNav> {
             HomeScreen(navController)
         }
-        composable(route = Destination.settings.route){
-            Settings(navController)
+        composable<SettingsScreenNav> {
+            SettingsScreen(navController)
         }
-
-
+        composable<LicenseScreenNav> {
+            LicenseScreen(navController)
+        }
 
 
     }

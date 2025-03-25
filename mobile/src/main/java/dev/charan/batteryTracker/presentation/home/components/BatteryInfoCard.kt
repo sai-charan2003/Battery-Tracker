@@ -13,7 +13,6 @@ import dev.charan.batteryTracker.data.model.BatteryInfo
 
 @Composable
 fun BatteryInfoCard(batteryState : BatteryInfo) {
-    Log.d("TAG", "BatteryInfoCard: $batteryState")
     ElevatedCard(
 
         modifier = Modifier

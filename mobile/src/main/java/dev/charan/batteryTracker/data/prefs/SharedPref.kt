@@ -11,9 +11,6 @@ import dev.charan.batteryTracker.utils.SharedPref
 import androidx.core.content.edit
 
 class SharedPref(private val context : Context) {
-    private var sharedPreferences: SharedPreferences =
-        context.getSharedPreferences(KEY_SHAREDPREF_KEY,Context.MODE_PRIVATE)
-
     companion object{
         const val KEY_SHAREDPREF_KEY="key_sharedpref_key"
     }

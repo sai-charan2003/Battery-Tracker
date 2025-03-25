@@ -40,11 +40,12 @@ import dev.charan.batteryTracker.presentation.settings.components.CheckForUpdate
 import kotlinx.coroutines.flow.collectLatest
 import androidx.core.net.toUri
 import com.google.accompanist.permissions.shouldShowRationale
+import dev.charan.batteryTracker.presentation.navigation.LicenseScreenNav
 import dev.charan.batteryTracker.presentation.settings.components.NotificationSettingsBottomSheet
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
-fun Settings(
+fun SettingsScreen(
     navHostController: NavHostController,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
@@ -141,8 +142,10 @@ fun Settings(
                 SettingsItem(title = "Notification Settings") { showNotificationSettingsBottomSheet = true }
                 HorizontalDivider()
                 SettingsItem(title = "Project On Github") { viewModel.onEvent(SettingsEvent.onGithubOpen) }
+//                HorizontalDivider()
+//                SettingsItem(title = "Check for update") { showCheckForUpdateDialog = true }
                 HorizontalDivider()
-                SettingsItem(title = "Check for update") { showCheckForUpdateDialog = true }
+                SettingsItem(title = "Licenses") { navHostController.navigate(LicenseScreenNav) }
 //                HorizontalDivider()
 //                DarkModeToggle(state.isDarkModeEnabled) { viewModel.onEvent(SettingsEvent.onChangeDarkMode) }
             }

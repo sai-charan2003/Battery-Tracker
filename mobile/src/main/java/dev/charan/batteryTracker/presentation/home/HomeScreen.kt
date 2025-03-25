@@ -29,6 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import dev.charan.batteryTracker.presentation.home.components.BatteryInfoCard
 import dev.charan.batteryTracker.presentation.home.components.BatteryLevelDisplay
+import dev.charan.batteryTracker.presentation.navigation.SettingsScreenNav
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,7 +63,7 @@ fun HomeScreen(
                         onDismissRequest = { showdropdownmenu = false }) {
                         DropdownMenuItem(
                             text = { Text("Settings") },
-                            onClick = { navHostController.navigate(dev.charan.batteryTracker.Navigation.Destination.settings.route) }
+                            onClick = { navHostController.navigate(SettingsScreenNav) }
                         )
 
                     }

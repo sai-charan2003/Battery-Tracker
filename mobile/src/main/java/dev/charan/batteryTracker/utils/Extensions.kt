@@ -11,8 +11,6 @@ fun BatteryInfo.convertToJsonString() : String{
 }
 fun String.convertToBatteryModel() : BatteryInfo {
     try {
-
-
         val batteryInfo: BatteryInfo = Json.decodeFromString(this)
         return batteryInfo
     } catch (e:Exception){
