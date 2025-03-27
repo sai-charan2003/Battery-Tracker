@@ -17,6 +17,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dev.charan.batteryTracker.data.prefs.SharedPref
 import dev.charan.batteryTracker.data.repository.BatteryInfoRepo
 import dev.charan.batteryTracker.data.repository.impl.BatteryInfoRepoImp
+import dev.charan.batteryTracker.utils.NotificationHelper
 import dev.charan.batteryTracker.utils.convertToJsonString
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +29,7 @@ class PhoneListenerService: WearableListenerService() {
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate() {
         super.onCreate()
-        val batteryInfoRepo = BatteryInfoRepoImp(applicationContext, sharedPref = SharedPref(applicationContext))
+        val batteryInfoRepo = BatteryInfoRepoImp(applicationContext, sharedPref = SharedPref(applicationContext), notificationHelper = NotificationHelper(applicationContext))
         val batteryData = batteryInfoRepo.getPhoneBatteryData().convertToJsonString()
         scope.launch {
             getNodes(applicationContext).forEach { nodeId ->

@@ -13,6 +13,7 @@ import dev.charan.batteryTracker.data.repository.BatteryInfoRepo
 import dev.charan.batteryTracker.data.repository.WidgetRepository
 import dev.charan.batteryTracker.data.repository.impl.BatteryInfoRepoImp
 import dev.charan.batteryTracker.data.prefs.SharedPref
+import dev.charan.batteryTracker.utils.NotificationHelper
 import javax.inject.Singleton
 
 @Module
@@ -20,8 +21,8 @@ import javax.inject.Singleton
 class AppModule {
     @Provides
     @Singleton
-    fun provideBatteryInfoRepo(@ApplicationContext context : Context): BatteryInfoRepo {
-        return BatteryInfoRepoImp(context, provideSharedPref(context))
+    fun provideBatteryInfoRepo(@ApplicationContext context : Context,sharedPref: SharedPref, notificationHelper: NotificationHelper): BatteryInfoRepo {
+        return BatteryInfoRepoImp(context, sharedPref,notificationHelper)
     }
 
     @Provides
@@ -49,6 +50,12 @@ class AppModule {
     @Singleton
     fun provideWorkManager(@ApplicationContext context: Context): WorkManager {
         return WorkManager.getInstance(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNotificationHelper(@ApplicationContext context: Context) : NotificationHelper {
+        return NotificationHelper(context)
     }
 
 

@@ -25,6 +25,7 @@ import dev.charan.batteryTracker.data.repository.BatteryInfoRepo
 import dev.charan.batteryTracker.data.model.BatteryInfo
 import dev.charan.batteryTracker.data.model.BluetoothDeviceBatteryInfo
 import dev.charan.batteryTracker.data.prefs.SharedPref
+import dev.charan.batteryTracker.utils.NotificationHelper
 import dev.charan.batteryTracker.utils.convertToBatteryModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,7 +36,8 @@ import javax.inject.Inject
 
 class BatteryInfoRepoImp @Inject constructor(
     @ApplicationContext val context : Context,
-    val sharedPref: SharedPref
+    val sharedPref: SharedPref,
+    val notificationHelper: NotificationHelper
 ): BatteryInfoRepo {
     private val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
     private val powerManager = context.getSystemService(Context.POWER_SERVICE) as? PowerManager
@@ -122,9 +124,7 @@ class BatteryInfoRepoImp @Inject constructor(
         var isWearOsConnected = false
         var wearOsName : String? = null
         Wearable.getMessageClient(context).addListener {
-
             wearOSBatteryData = String(it.data).convertToBatteryModel()
-            Log.d("TAG", "registerWearOsBatteryReceiver: $wearOSBatteryData")
             if(wearOSBatteryData.batteryLevel.isNullOrEmpty().not()){
                 isWearOsConnected = true
                 val pariedDevices : List<BluetoothDevice> = bluetoothAdapter.bondedDevices.filter { it.bluetoothClass.majorDeviceClass == BluetoothClass.Device.Major.AUDIO_VIDEO }
@@ -134,6 +134,17 @@ class BatteryInfoRepoImp @Inject constructor(
 
                     }
                 }
+            }
+            if (wearOSBatteryData.batteryLevel.toDouble() <= sharedPref.minWearosBattery!!.toString().toDouble() && !sharedPref.isNotificationSent)
+            {
+                notificationHelper.showLowBatteryNotificationForWearos(
+                    batteryLevel = wearOSBatteryData.batteryLevel,
+                    deviceName = wearOSBatteryData.deviceName
+                )
+                sharedPref.isNotificationSent = true
+
+            } else {
+                sharedPref.isNotificationSent = false
             }
 
             bluetoothBatteryInfo.update {
@@ -204,6 +215,17 @@ class BatteryInfoRepoImp @Inject constructor(
                 hasHeadPhones = true
             }
         }
+        if(headPhoneBatteryLevel.toLong() <= sharedPref.minHeadphonesBattery!!.toLong() && !sharedPref.isNotificationSentForHeadPhones){
+            notificationHelper.showLowBatteryNotificationForHeadPhones(
+                batteryLevel = headPhoneBatteryLevel.toString(),
+                deviceName = headPhoneName
+            )
+            sharedPref.isNotificationSentForHeadPhones = true
+
+        } else {
+            sharedPref.isNotificationSentForHeadPhones = false
+        }
+
         bluetoothBatteryInfo.update {
             it.copy(
                 headPhoneName = headPhoneName,

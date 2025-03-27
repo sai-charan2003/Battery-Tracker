@@ -11,6 +11,7 @@ import dagger.hilt.components.SingletonComponent
 import dev.charan.batteryTracker.data.model.BatteryInfo
 import dev.charan.batteryTracker.data.model.BluetoothDeviceBatteryInfo
 import dev.charan.batteryTracker.data.prefs.SharedPref
+import dev.charan.batteryTracker.utils.NotificationHelper
 import dev.charan.batteryTracker.widgets.Material3widget
 import dev.charan.batteryTracker.widgets.TransparentWidget
 import dev.charan.batteryTracker.widgets.WidgetState
@@ -46,7 +47,6 @@ class WidgetRepository @Inject constructor(
     }
 
     fun startObserving() {
-        Log.d("TAG", "startObserving: from observe")
         batteryInfoRepo.registerBatteryReceiver()
         batteryInfoRepo.registerWearOsBatteryReceiver()
         batteryInfoRepo.registerBluetoothBatteryReceiver()
@@ -76,7 +76,6 @@ class WidgetRepository @Inject constructor(
     }
 
     suspend fun updateWidget() {
-        Log.d("TAG", "updateWidget: updated widget")
         val manager = GlanceAppWidgetManager(context)
         val widgetIds = manager.getGlanceIds(Material3widget::class.java)
         widgetIds.forEach {
