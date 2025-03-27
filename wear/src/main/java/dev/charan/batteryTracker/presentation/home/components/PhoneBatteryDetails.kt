@@ -38,7 +38,7 @@ fun PhoneBatterDetails(
         startAngle = 290f,
         endAngle = 250f,
         strokeWidth = 4.dp,
-        indicatorColor = if(isCharging) Color.Green else Color.Blue
+        indicatorColor = if(isCharging) Color.Green else MaterialTheme.colors.primary
     )
     BatteryDetails(
         deviceName = deviceName,
