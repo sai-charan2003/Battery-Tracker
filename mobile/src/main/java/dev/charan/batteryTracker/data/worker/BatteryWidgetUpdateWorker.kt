@@ -12,6 +12,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dev.charan.batteryTracker.data.repository.WidgetRepository
 import dev.charan.batteryTracker.utils.AppConstants
 import dev.charan.batteryTracker.widgets.Material3widget
@@ -20,19 +21,16 @@ import java.util.concurrent.TimeUnit
 
 @HiltWorker
 class BatteryWidgetUpdateWorker @AssistedInject constructor(
-    @Assisted val context: Context,
+    @ApplicationContext val context: Context,
     @Assisted workerParams: WorkerParameters,
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
-        try {
+            Log.d("TAG", "doWork: started")
             Material3widget.updateAll(context)
             TransparentWidget.updateAll(context)
             return Result.success()
-        } catch (e:Exception){
-            Log.d("TAG", "doWork: ${e.message}")
-            return Result.failure()
-        }
+
 
     }
 

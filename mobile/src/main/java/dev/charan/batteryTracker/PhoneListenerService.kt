@@ -26,7 +26,6 @@ import javax.inject.Inject
 
 class PhoneListenerService: WearableListenerService() {
     private val scope = CoroutineScope(Dispatchers.IO)
-    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate() {
         super.onCreate()
         val batteryInfoRepo = BatteryInfoRepoImp(applicationContext, sharedPref = SharedPref(applicationContext), notificationHelper = NotificationHelper(applicationContext))

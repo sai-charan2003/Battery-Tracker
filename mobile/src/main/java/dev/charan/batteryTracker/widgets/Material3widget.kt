@@ -42,21 +42,18 @@ import dev.charan.batteryTracker.data.model.BluetoothDeviceBatteryInfo
 import dev.charan.batteryTracker.data.worker.BatteryWidgetUpdateWorker
 import dev.charan.batteryTracker.widgets.components.WidgetContent
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 object Material3widget: GlanceAppWidget() {
-    @RequiresApi(Build.VERSION_CODES.R)
-
-
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val repo = WidgetRepository.get(context)
 
         provideContent {
             GlanceTheme {
                 BatteryWidgetUpdateWorker.setup(context)
-                Log.d("TAG", "provideGlance: updated")
                 Material3WidgetContent(repo)
             }
         }
@@ -90,11 +87,14 @@ object Material3widget: GlanceAppWidget() {
         var batteryState by remember {
             mutableStateOf(WidgetState())
         }
-        val bluetoothDeviceBatteryInfo by widgetRepository.bluetoothBatteryData().collectAsState(initial = BluetoothDeviceBatteryInfo())
+        var bluetoothDeviceBatteryInfo by remember {
+            mutableStateOf(BluetoothDeviceBatteryInfo())
+        }
         Log.d("TAG", "Material3WidgetContent: $bluetoothDeviceBatteryInfo")
         LaunchedEffect(Unit) {
             launch(Dispatchers.IO) {
                 batteryState = widgetRepository.allDevicesBatteryData()
+//                bluetoothDeviceBatteryInfo = widgetRepository.bluetoothBatteryData().collectAsState(BluetoothDeviceBatteryInfo())
             }
         }
 

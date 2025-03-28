@@ -30,7 +30,7 @@ android {
 
     defaultConfig {
         applicationId = "dev.charan.batteryTracker"
-        minSdk = 27
+        minSdk = 30
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -113,6 +113,7 @@ dependencies {
 
     // For AppWidgets support
     implementation (libs.androidx.glance.appwidget)
+    debugImplementation(libs.leakcanary.android)
 
 
 
