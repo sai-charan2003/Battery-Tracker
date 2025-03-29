@@ -22,3 +22,4 @@ local.properties
 /wear/src/release/google-services.json
 /wear/src/release/keystore
 /mobile/release/
+/wear/release/
