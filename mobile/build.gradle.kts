@@ -1,5 +1,6 @@
 import com.android.build.api.dsl.Lint
 import com.android.build.api.dsl.LintOptions
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.jetbrains.kotlin.gradle.utils.property
 import java.util.Properties
 
@@ -47,12 +48,21 @@ android {
             name = "API_KEY",
             value = apiKey
         )
-
-
     }
     buildFeatures {
         buildConfig = true
         compose =true
+    }
+    signingConfigs {
+        create("release") {
+            val properties = Properties().apply {
+                load(project.rootProject.file("local.properties").inputStream())
+            }
+            keyAlias = properties.getProperty("KEY_ALIAS") ?: ""
+            keyPassword = properties.getProperty("KEY_PASSWORD") ?: ""
+            storeFile = file(properties.getProperty("KEY_LOCATION") ?: "")
+            storePassword = properties.getProperty("KEY_STORE_PASSWORD") ?: ""
+        }
     }
 
 
@@ -66,6 +76,7 @@ android {
         }
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

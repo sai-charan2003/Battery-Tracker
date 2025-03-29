@@ -18,3 +18,7 @@ local.properties
 /mobile/src/release
 
 .kotlin/
+/wear/src/debug/google-services.json
+/wear/src/release/google-services.json
+/wear/src/release/keystore
+/mobile/release/

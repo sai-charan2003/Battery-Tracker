@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -36,6 +38,17 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    signingConfigs {
+        create("release") {
+            val properties = Properties().apply {
+                load(project.rootProject.file("local.properties").inputStream())
+            }
+            keyAlias = properties.getProperty("KEY_ALIAS") ?: ""
+            keyPassword = properties.getProperty("KEY_PASSWORD") ?: ""
+            storeFile = file(properties.getProperty("KEY_LOCATION") ?: "")
+            storePassword = properties.getProperty("KEY_STORE_PASSWORD") ?: ""
+        }
+    }
     kotlinOptions {
         jvmTarget = "1.8"
     }
@@ -58,6 +71,7 @@ android {
         }
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
