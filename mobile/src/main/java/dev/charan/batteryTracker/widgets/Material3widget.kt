@@ -87,14 +87,12 @@ object Material3widget: GlanceAppWidget() {
         var batteryState by remember {
             mutableStateOf(WidgetState())
         }
-        var bluetoothDeviceBatteryInfo by remember {
-            mutableStateOf(BluetoothDeviceBatteryInfo())
-        }
+        val bluetoothDeviceBatteryInfo by widgetRepository.bluetoothBatteryData().collectAsState(BluetoothDeviceBatteryInfo())
         Log.d("TAG", "Material3WidgetContent: $bluetoothDeviceBatteryInfo")
         LaunchedEffect(Unit) {
             launch(Dispatchers.IO) {
                 batteryState = widgetRepository.allDevicesBatteryData()
-//                bluetoothDeviceBatteryInfo = widgetRepository.bluetoothBatteryData().collectAsState(BluetoothDeviceBatteryInfo())
+
             }
         }
 

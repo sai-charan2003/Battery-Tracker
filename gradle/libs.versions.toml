@@ -46,6 +46,8 @@ workRuntime = "2.10.0"
 lifecycleRuntimeKtx = "2.7.0"
 aboutlibrariesCore = "11.2.3"
 splash-screen = "1.0.1"
+firebaseCrashlytics = "19.4.2"
+googleFirebaseCrashlytics = "3.0.3"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
@@ -102,6 +104,7 @@ androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-com
 aboutlibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "aboutlibrariesCore" }
 aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "aboutlibrariesCore" }
 splash-screen = { module = "androidx.core:core-splashscreen", version.ref = "splash-screen" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 
 
 
@@ -113,6 +116,7 @@ compose-compiler = {id ="org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 hilt-android = {id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid"}
 mikepenz-aboutlibrary = {id = "com.mikepenz.aboutlibraries.plugin",version.ref = "aboutlibrariesCore"}
+google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "googleFirebaseCrashlytics" }
 
 
 

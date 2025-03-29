@@ -39,11 +39,12 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideWidgetRepository(@ApplicationContext context : Context, batteryInfoRepo: BatteryInfoRepo, sharedPref: SharedPref): WidgetRepository {
+    fun provideWidgetRepository(@ApplicationContext context : Context, batteryInfoRepo: BatteryInfoRepo, sharedPref: SharedPref,settingsUtils: SettingsUtils): WidgetRepository {
         return WidgetRepository(
             context = context,
             batteryInfoRepo = batteryInfoRepo,
-            sharedPref = sharedPref
+            sharedPref = sharedPref,
+            settingsUtils = settingsUtils
         )
     }
     @Provides

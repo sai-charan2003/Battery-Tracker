@@ -10,5 +10,6 @@ plugins {
     id("org.gradle.android.cache-fix") version "3.0.1" apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.mikepenz.aboutlibrary) apply false
+    alias(libs.plugins.google.firebase.crashlytics) apply false
 
 }
