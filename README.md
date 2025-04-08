@@ -1,4 +1,4 @@
-    # Battery Tracker
+# Battery Tracker
 The Battery Tracker application is designed to provide users with comprehensive information about their device's battery status, including battery levels, temperature, and health. It is built using Jetpack Compose and Kotlin.
 
 Battery Tracker app features widgets that display battery percentages for both the phone and wearable devices, such as Wear OS watches and headphones.
