@@ -34,6 +34,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setTheme(android.R.style.Theme_DeviceDefault)
         setContent {
+            var sendMessage by remember { mutableStateOf(true) }
             var batteryInfo by remember { mutableStateOf(BatteryInfo()) }
             var phoneData by remember { mutableStateOf("") }
             Wearable.getMessageClient(this).addListener {
@@ -45,7 +46,7 @@ class MainActivity : ComponentActivity() {
                 batteryInfo = phoneData.convertToBatteryModel()
 
             }
-            LaunchedEffect(key1 = Unit) {
+            LaunchedEffect(sendMessage) {
                 launch (Dispatchers.IO) {
                     getNodes(this@MainActivity).forEach { nodeId ->
                         Wearable.getMessageClient(this@MainActivity).sendMessage(
@@ -55,6 +56,7 @@ class MainActivity : ComponentActivity() {
                         ).apply {
                             addOnSuccessListener { Log.d("TAG", "Message sent to $nodeId") }
                             addOnFailureListener { Log.d("TAG", "Failed to send message to $nodeId : $it") }
+                            sendMessage = false
                         }
 
 
@@ -63,7 +65,10 @@ class MainActivity : ComponentActivity() {
             }
             BatteryTrackerTheme {
                 HomeScreen(
-                    batteryInfo
+                    batteryInfo,
+                    fetchBattery = {
+                        sendMessage = true
+                    }
                 )
             }
 

@@ -13,7 +13,8 @@ import dev.charan.batteryTracker.presentation.home.components.PhoneBatterDetails
 
 @Composable
 fun HomeScreen(
-    batteryInfo: BatteryInfo
+    batteryInfo: BatteryInfo,
+    fetchBattery: () -> Unit
 ){
     Box(
         modifier = Modifier
@@ -26,7 +27,11 @@ fun HomeScreen(
             batteryPercentage = batteryInfo.batteryPercentage,
             isCharging = batteryInfo.isCharging,
             deviceName = batteryInfo.deviceName,
-            batteryLevel = batteryInfo.batteryLevel
+            batteryLevel = batteryInfo.batteryLevel,
+            fetchBattery = {
+                fetchBattery()
+
+            }
         )
 
     }

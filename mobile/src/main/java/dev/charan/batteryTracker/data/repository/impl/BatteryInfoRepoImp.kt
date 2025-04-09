@@ -74,7 +74,6 @@ class BatteryInfoRepoImp @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun getPhoneBatteryData(): BatteryInfo {
-        Log.d("TAG", "updateBatteryInfo: from update battery")
 
         val batteryLevel = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
         val batteryStatus = batteryIntent?.getIntExtra(BatteryManager.EXTRA_STATUS, 0).getChargingStatus()
@@ -127,7 +126,7 @@ class BatteryInfoRepoImp @Inject constructor(
             wearOSBatteryData = String(it.data).convertToBatteryModel()
             if(wearOSBatteryData.batteryLevel.isNullOrEmpty().not()){
                 isWearOsConnected = true
-                val pariedDevices : List<BluetoothDevice> = bluetoothAdapter.bondedDevices.filter { it.bluetoothClass.majorDeviceClass == BluetoothClass.Device.Major.AUDIO_VIDEO }
+                val pariedDevices : List<BluetoothDevice> = bluetoothAdapter.bondedDevices.filter { it.bluetoothClass.majorDeviceClass == BluetoothClass.Device.Major.WEARABLE }
                 pariedDevices.forEach {
                     if(it.bluetoothClass.majorDeviceClass == BluetoothClass.Device.Major.WEARABLE){
                         wearOsName = it.alias

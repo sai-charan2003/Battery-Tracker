@@ -50,7 +50,6 @@ import javax.inject.Inject
 object Material3widget: GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val repo = WidgetRepository.get(context)
-
         provideContent {
             GlanceTheme {
                 BatteryWidgetUpdateWorker.setup(context)
@@ -58,13 +57,13 @@ object Material3widget: GlanceAppWidget() {
             }
         }
     }
+}
 
     @AndroidEntryPoint
     class Material3WidgetReceiver : GlanceAppWidgetReceiver() {
         override val glanceAppWidget: GlanceAppWidget
             get() = Material3widget
-        @Inject
-        lateinit var  widgetRepository : WidgetRepository
+
 
 //        override fun onDisabled(context: Context?) {
 //            widgetRepository.cleanUp()
@@ -128,5 +127,5 @@ object Material3widget: GlanceAppWidget() {
                 )
         }
     }
-}
+
 

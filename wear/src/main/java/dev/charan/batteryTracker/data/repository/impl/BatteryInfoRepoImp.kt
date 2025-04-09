@@ -25,7 +25,7 @@ class BatteryInfoRepoImp(
             batteryLevel = batteryLevel.toString(),
             batteryPercentage = batteryLevel / 100f,
             isCharging = batteryStatus == "Charging",
-            deviceName = Build.DEVICE
+            deviceName = Build.BRAND + "Wear Os"
         )
 
 

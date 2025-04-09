@@ -50,12 +50,12 @@ class WidgetRepository @Inject constructor(
 
     fun startObserving() {
         if(settingsUtils.isBluetoothPermissionGranted()){
-            batteryInfoRepo.registerBatteryReceiver()
+            batteryInfoRepo.registerBluetoothBatteryReceiver()
             batteryInfoRepo.registerWearOsBatteryReceiver()
-
         }
+        batteryInfoRepo.registerBatteryReceiver()
 
-        batteryInfoRepo.registerBluetoothBatteryReceiver()
+
 
     }
 
@@ -67,7 +67,9 @@ class WidgetRepository @Inject constructor(
         batteryInfoRepo.getBluetoothBatteryDetails()
 
     suspend fun allDevicesBatteryData(): WidgetState {
-        batteryInfoRepo.sendSignalToWearOs()
+        if(settingsUtils.isBluetoothPermissionGranted()) {
+            batteryInfoRepo.sendSignalToWearOs()
+        }
         return WidgetState(
             deviceBattery = batteryInfoRepo.getPhoneBatteryData(),
             bluetoothBattery = batteryInfoRepo.getBluetoothBatteryDetails().first() ?: BluetoothDeviceBatteryInfo()

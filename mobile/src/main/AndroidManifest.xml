@@ -50,7 +50,7 @@
         </service>
 
         <receiver
-            android:name=".widgets.Material3widget$Material3WidgetReceiver"
+            android:name=".widgets.Material3WidgetReceiver"
             android:description="@string/Material_3"
             android:exported="true"
             android:label="Battery Widget">

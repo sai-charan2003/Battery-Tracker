@@ -30,7 +30,8 @@ fun PhoneBatterDetails(
     batteryLevel : String,
     batteryPercentage: Float,
     isCharging: Boolean,
-    deviceName: String
+    deviceName: String,
+    fetchBattery: () -> Unit
 ) {
     CircularProgressIndicator(
         progress = batteryPercentage,
@@ -44,7 +45,11 @@ fun PhoneBatterDetails(
         deviceName = deviceName,
         isCharging = isCharging,
         batteryPercentage = batteryPercentage,
-        batteryLevel = batteryLevel
+        batteryLevel = batteryLevel,
+        fetchBattery = {
+            fetchBattery()
+
+        }
     )
 
 
@@ -54,7 +59,8 @@ fun BatteryDetails(
     batteryLevel: String,
     deviceName: String,
     isCharging: Boolean,
-    batteryPercentage : Float
+    batteryPercentage : Float,
+    fetchBattery : () -> Unit
 ) {
     Column(modifier=Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -75,6 +81,8 @@ fun BatteryDetails(
         }
         OutlinedButton(
             onClick = {
+                fetchBattery()
+
             },
             modifier = Modifier
                 .size(ButtonDefaults.ExtraSmallButtonSize)
@@ -90,6 +98,6 @@ fun BatteryDetails(
 @Composable
 @Preview(showBackground = true, showSystemUi = true, device = "id:wearos_small_round")
 fun PhoneBatteryDetailsPreview() {
-    PhoneBatterDetails(batteryPercentage = 50f, isCharging = true, deviceName = "Phone", batteryLevel = "")
+    PhoneBatterDetails(batteryPercentage = 50f, isCharging = true, deviceName = "Phone", batteryLevel = "", fetchBattery = {})
 
 }

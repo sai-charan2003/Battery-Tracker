@@ -22,8 +22,9 @@ object BatteryUtils {
             BatteryManager.BATTERY_STATUS_FULL ->return "Full"
             BatteryManager.BATTERY_STATUS_DISCHARGING -> return "Discharging"
             BatteryManager.BATTERY_STATUS_NOT_CHARGING -> return "Not Charging"
+            BatteryManager.BATTERY_STATUS_UNKNOWN -> return "Unknown"
         }
-        return "chargingstatus"
+        return "Unknown"
     }
     
     fun Int?.getPluggedType() : String{

@@ -30,8 +30,6 @@ class BatteryWidgetUpdateWorker @AssistedInject constructor(
             Material3widget.updateAll(context)
             TransparentWidget.updateAll(context)
             return Result.success()
-
-
     }
 
     companion object {
