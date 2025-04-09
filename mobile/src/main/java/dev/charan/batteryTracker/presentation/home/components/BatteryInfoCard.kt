@@ -37,7 +37,7 @@ fun BatteryInfoCard(batteryState : BatteryInfo) {
                 )
             DetailsInfoRow(
                 title = "Health Info",
-                body = batteryState.batteryStatus,
+                body = batteryState.batteryHealth,
                 modifier = Modifier
             )
             DetailsInfoRow(
