@@ -134,16 +134,19 @@ class BatteryInfoRepoImp @Inject constructor(
                     }
                 }
             }
-            if (wearOSBatteryData.batteryLevel.toDouble() <= sharedPref.minWearosBattery!!.toString().toDouble() && !sharedPref.isNotificationSent)
-            {
-                notificationHelper.showLowBatteryNotificationForWearos(
-                    batteryLevel = wearOSBatteryData.batteryLevel,
-                    deviceName = wearOSBatteryData.deviceName
-                )
-                sharedPref.isNotificationSent = true
+            if(wearOSBatteryData.batteryLevel.isEmpty().not()) {
+                if (wearOSBatteryData.batteryLevel.toDouble() <= sharedPref.minWearosBattery!!.toString()
+                        .toDouble() && !sharedPref.isNotificationSent
+                ) {
+                    notificationHelper.showLowBatteryNotificationForWearos(
+                        batteryLevel = wearOSBatteryData.batteryLevel,
+                        deviceName = wearOsName ?: wearOSBatteryData.deviceName
+                    )
+                    sharedPref.isNotificationSent = true
 
-            } else {
-                sharedPref.isNotificationSent = false
+                } else {
+                    sharedPref.isNotificationSent = false
+                }
             }
 
             bluetoothBatteryInfo.update {
