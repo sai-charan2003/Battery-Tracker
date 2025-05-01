@@ -39,9 +39,6 @@ class BatteryInfoRepoImp @Inject constructor(
     val sharedPref: SharedPref,
     val notificationHelper: NotificationHelper
 ): BatteryInfoRepo {
-    private val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
-    private val powerManager = context.getSystemService(Context.POWER_SERVICE) as? PowerManager
-    private val batteryIntent = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
     private var batteryReceiver: BroadcastReceiver? = null
     private val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
@@ -72,12 +69,13 @@ class BatteryInfoRepoImp @Inject constructor(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.P)
     override fun getPhoneBatteryData(): BatteryInfo {
+        val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as? PowerManager
+        val batteryIntent = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
 
         val batteryLevel = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
         val batteryStatus = batteryIntent?.getIntExtra(BatteryManager.EXTRA_STATUS, 0).getChargingStatus()
-
         batteryInfoFlow.value = BatteryInfo(
             deviceName = sharedPref.deviceName.toString(),
             batteryLevel = batteryLevel.toString(),
@@ -98,7 +96,6 @@ class BatteryInfoRepoImp @Inject constructor(
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
-    @RequiresApi(Build.VERSION_CODES.R)
     override fun getBluetoothBattery(): BluetoothDeviceBatteryInfo {
         val headPhoneBatteryLevel = getHeadPhoneBatteryInfo()
         val wearOsBattery = registerWearOsBatteryReceiver()
@@ -111,12 +108,10 @@ class BatteryInfoRepoImp @Inject constructor(
         )
     }
 
-    @RequiresApi(Build.VERSION_CODES.P)
     override fun getBatteryDetails(): StateFlow<BatteryInfo?> = batteryInfoFlow.asStateFlow()
 
     override fun getBluetoothBatteryDetails(): Flow<BluetoothDeviceBatteryInfo?> = bluetoothBatteryInfo.asStateFlow()
 
-    @RequiresApi(Build.VERSION_CODES.R)
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     override fun registerWearOsBatteryReceiver() {
         var wearOSBatteryData = BatteryInfo()
@@ -163,7 +158,7 @@ class BatteryInfoRepoImp @Inject constructor(
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.R)
+
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     override fun registerBluetoothBatteryReceiver() {
         var headPhoneName = ""
@@ -199,7 +194,7 @@ class BatteryInfoRepoImp @Inject constructor(
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.R)
+
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     override fun getHeadPhoneBatteryInfo(): BluetoothDeviceBatteryInfo {
         var headPhoneName = ""
@@ -244,7 +239,7 @@ class BatteryInfoRepoImp @Inject constructor(
         )
     }
 
-    @RequiresApi(Build.VERSION_CODES.R)
+
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     override suspend fun sendSignalToWearOs() {
         getNodes(context)
@@ -270,6 +265,10 @@ class BatteryInfoRepoImp @Inject constructor(
     }
 
     private fun getNodes(context: Context): Collection<String> {
-        return Tasks.await(Wearable.getNodeClient(context).connectedNodes).map { it.id }
+        return try {
+            Tasks.await(Wearable.getNodeClient(context).connectedNodes).map { it.id }
+        } catch (e: Exception){
+            emptyList()
+        }
     }
 }

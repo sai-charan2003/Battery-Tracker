@@ -52,7 +52,6 @@ object Material3widget: GlanceAppWidget() {
         val repo = WidgetRepository.get(context)
         provideContent {
             GlanceTheme {
-                BatteryWidgetUpdateWorker.setup(context)
                 Material3WidgetContent(repo)
             }
         }
@@ -68,13 +67,12 @@ object Material3widget: GlanceAppWidget() {
 //        override fun onDisabled(context: Context?) {
 //            widgetRepository.cleanUp()
 //        }
-//
-//        override fun onEnabled(context: Context?) {
-//            super.onEnabled(context)
-//            widgetRepository.startObserving()
-//            BatteryWidgetUpdateWorker.setup(context!!)
-//
-//        }
+
+        override fun onEnabled(context: Context?) {
+            super.onEnabled(context)
+            BatteryWidgetUpdateWorker.setup(context!!)
+
+        }
 
     }
 
@@ -87,7 +85,6 @@ object Material3widget: GlanceAppWidget() {
             mutableStateOf(WidgetState())
         }
         val bluetoothDeviceBatteryInfo by widgetRepository.bluetoothBatteryData().collectAsState(BluetoothDeviceBatteryInfo())
-        Log.d("TAG", "Material3WidgetContent: $bluetoothDeviceBatteryInfo")
         LaunchedEffect(Unit) {
             launch(Dispatchers.IO) {
                 batteryState = widgetRepository.allDevicesBatteryData()

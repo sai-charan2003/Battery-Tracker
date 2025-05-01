@@ -17,8 +17,8 @@ android {
         applicationId = "dev.charan.batteryTracker"
         minSdk = 26
         targetSdk = 34
-        versionCode = 2
-        versionName = "1.2"
+        versionCode = 3
+        versionName = "1.3"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -105,5 +105,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
 
 }
