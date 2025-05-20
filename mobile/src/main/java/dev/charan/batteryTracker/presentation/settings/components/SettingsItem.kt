@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowRight
 import androidx.compose.material.icons.filled.ArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -25,7 +26,7 @@ fun SettingsItem(title:String, onClick:()->Unit) {
         ) {
             Text(text = title)
 
-            Icon(imageVector = Icons.Filled.ArrowRight, contentDescription = "Arrow")
+            Icon(imageVector = Icons.AutoMirrored.Filled.ArrowRight, contentDescription = "Arrow")
         }
 
 

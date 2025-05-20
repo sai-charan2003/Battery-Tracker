@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.TimeText
+import androidx.wear.compose.material3.TimeText
 import dev.charan.batteryTracker.data.model.BatteryInfo
 import dev.charan.batteryTracker.presentation.home.components.PhoneBatterDetails
 

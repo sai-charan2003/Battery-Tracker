@@ -10,9 +10,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.LargeFlexibleTopAppBar
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -39,17 +42,20 @@ import dev.charan.batteryTracker.presentation.settings.components.ChangePhoneNam
 import dev.charan.batteryTracker.presentation.settings.components.CheckForUpdateDialog
 import kotlinx.coroutines.flow.collectLatest
 import androidx.core.net.toUri
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.shouldShowRationale
 import dev.charan.batteryTracker.presentation.navigation.LicenseScreenNav
 import dev.charan.batteryTracker.presentation.settings.components.NotificationSettingsBottomSheet
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class,
+    ExperimentalMaterial3ExpressiveApi::class
+)
 @Composable
 fun SettingsScreen(
     navHostController: NavHostController,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     val focusRequester = remember { FocusRequester() }
     val context = LocalContext.current
@@ -117,10 +123,13 @@ fun SettingsScreen(
     Scaffold(
         modifier = Modifier.nestedScroll(scroll.nestedScrollConnection),
         topBar = {
-            LargeTopAppBar(
+            LargeFlexibleTopAppBar(
                 title = { Text(text = "Settings") },
                 navigationIcon = {
-                    IconButton(onClick = { navHostController.popBackStack() }) {
+                    IconButton(
+                        onClick = { navHostController.popBackStack() },
+                        shapes = IconButtonDefaults.shapes()
+                    ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
                             contentDescription = "Back"

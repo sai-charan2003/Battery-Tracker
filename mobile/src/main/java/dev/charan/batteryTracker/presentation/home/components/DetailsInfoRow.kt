@@ -4,6 +4,7 @@ import android.widget.Space
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +25,7 @@ fun DetailsInfoRow(
 
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun TitleText(
     text:String,
@@ -31,18 +33,19 @@ fun TitleText(
     Text(
         text = text,
         modifier = Modifier.then(modifier),
-        style = MaterialTheme.typography.titleMedium,
+        style = MaterialTheme.typography.titleMediumEmphasized,
         fontWeight = FontWeight.Bold
     )
 
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun BodyText(text: String,modifier: Modifier = Modifier){
     Text(
         text = text,
         modifier = Modifier.then(modifier),
-        style = MaterialTheme.typography.titleMedium,
+        style = MaterialTheme.typography.titleMediumEmphasized,
         fontWeight = FontWeight.Medium
     )
 }

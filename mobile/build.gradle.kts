@@ -1,5 +1,4 @@
 import com.android.build.api.dsl.Lint
-import com.android.build.api.dsl.LintOptions
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.jetbrains.kotlin.gradle.utils.property
 import java.util.Properties
@@ -20,9 +19,6 @@ plugins {
 
 android {
 
-    fun Lint.() {
-        checkReleaseBuilds = false
-    }
 
 
 
@@ -34,7 +30,7 @@ android {
         minSdk = 30
         targetSdk = 35
         versionCode = 3
-        versionName = "1.3"
+        versionName = "1.4"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -53,6 +49,15 @@ android {
         buildConfig = true
         compose =true
     }
+    applicationVariants.all {
+        val variant = this
+        variant.outputs.map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
+            .forEach { output ->
+                val outputFileName = "Battery-Tracker-Mobile-${variant.buildType.name}-${variant.versionName}.apk"
+                output.outputFileName = outputFileName
+            }
+    }
+
     signingConfigs {
         create("release") {
             val properties = Properties().apply {
@@ -95,6 +100,9 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+    lint {
+        disable.add("NullSafeMutableLiveData")
     }
 }
 

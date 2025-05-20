@@ -15,6 +15,7 @@ import dev.charan.batteryTracker.utils.SettingsUtils
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
@@ -110,20 +111,20 @@ class SettingsViewModel @Inject constructor(
     private fun changeMinHeadphoneBatteryLevel(value : Float) {
         _state.update {
             it.copy(
-                headPhonesMinimumBattery = value
+                headPhonesMinimumBattery = value.roundToInt().toFloat()
             )
         }
-        sharedPref.minHeadphonesBattery = value.toString()
+        sharedPref.minHeadphonesBattery = value.roundToInt().toString()
     }
 
     private fun changeMinWearOsBatteryLevel(value: Float){
         _state.update {
             it.copy(
-                wearOsMinimumBattery = value
+                wearOsMinimumBattery = value.roundToInt().toFloat()
 
             )
         }
-        sharedPref.minWearosBattery = value.toString()
+        sharedPref.minWearosBattery = value.roundToInt().toString()
     }
 
     private fun changeDarkMode(){

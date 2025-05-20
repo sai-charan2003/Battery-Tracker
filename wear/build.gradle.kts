@@ -11,14 +11,14 @@ plugins {
 
 android {
     namespace = "dev.charan.batteryTracker"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "dev.charan.batteryTracker"
         minSdk = 26
         targetSdk = 34
         versionCode = 3
-        versionName = "1.3"
+        versionName = "1.4"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -33,6 +33,14 @@ android {
                 "proguard-rules.pro"
             )
         }
+    }
+    applicationVariants.all {
+        val variant = this
+        variant.outputs.map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
+            .forEach { output ->
+                val outputFileName = "Battery-Tracker-Wear-${variant.buildType.name}-${variant.versionName}.apk"
+                output.outputFileName = outputFileName
+            }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -105,6 +113,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.androidx.compose.material3)
 
 
 }

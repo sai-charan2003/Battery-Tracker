@@ -17,12 +17,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.material.ButtonDefaults
-import androidx.wear.compose.material.CircularProgressIndicator
-import androidx.wear.compose.material.Icon
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.OutlinedButton
-import androidx.wear.compose.material.Text
+import androidx.wear.compose.material3.ButtonDefaults
+import androidx.wear.compose.material3.CircularProgressIndicator
+import androidx.wear.compose.material3.Icon
+import androidx.wear.compose.material3.IconButton
+import androidx.wear.compose.material3.IconButtonDefaults
+import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.OutlinedIconButton
+import androidx.wear.compose.material3.ProgressIndicatorDefaults
+import androidx.wear.compose.material3.Text
 import dev.charan.batteryTracker.R
 
 @Composable
@@ -34,12 +37,14 @@ fun PhoneBatterDetails(
     fetchBattery: () -> Unit
 ) {
     CircularProgressIndicator(
-        progress = batteryPercentage,
+        progress = { batteryPercentage },
         modifier = Modifier.fillMaxSize(),
         startAngle = 290f,
         endAngle = 250f,
-        strokeWidth = 4.dp,
-        indicatorColor = if(isCharging) Color.Green else MaterialTheme.colors.primary
+        strokeWidth = 5.dp,
+        colors =ProgressIndicatorDefaults.colors(
+            indicatorColor = if (isCharging) Color.Green else MaterialTheme.colorScheme.primary
+        )
     )
     BatteryDetails(
         deviceName = deviceName,
@@ -74,21 +79,21 @@ fun BatteryDetails(
             Text(
                 text = "${batteryLevel}%",
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.title1
+                style = MaterialTheme.typography.titleSmall
 
             )
 
         }
-        OutlinedButton(
+        IconButton(
             onClick = {
                 fetchBattery()
-
             },
+
             modifier = Modifier
-                .size(ButtonDefaults.ExtraSmallButtonSize)
                 .padding(bottom = 10.dp)
+                .size(24.dp)
         ) {
-            Icon(imageVector = Icons.Default.Refresh, contentDescription = null)
+            Icon(imageVector = Icons.Default.Refresh, contentDescription = null, modifier = Modifier.size(15.dp))
 
 
         }
