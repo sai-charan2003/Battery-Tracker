@@ -1,6 +1,7 @@
 package dev.charan.batteryTracker.presentation.home.components
 
 import android.util.Log
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,8 +37,9 @@ fun PhoneBatterDetails(
     deviceName: String,
     fetchBattery: () -> Unit
 ) {
+    val animatedProgress = animateFloatAsState(targetValue = batteryPercentage, label = "progress")
     CircularProgressIndicator(
-        progress = { batteryPercentage },
+        progress = { animatedProgress.value },
         modifier = Modifier.fillMaxSize(),
         startAngle = 290f,
         endAngle = 250f,
