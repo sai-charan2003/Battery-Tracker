@@ -2,7 +2,7 @@
 accompanistPermissions = "0.37.2"
 accompanistSwiperefresh = "0.34.0"
 agp = "8.7.3"
-composeMaterial3 = "1.5.0-beta01"
+composeMaterial3 = "1.5.0-beta03"
 converterGson = "2.11.0"
 glance = "1.1.1"
 hiltWork = "1.2.0"
@@ -30,12 +30,12 @@ constraintlayout = "2.2.1"
 composeBom = "2023.08.00"
 composeMaterial = "1.4.1"
 composeFoundation = "1.4.1"
-material3Android = "1.4.0-alpha14"
+material3Android = "1.4.0-alpha15"
 activityCompose = "1.10.1"
 coreSplashscreen = "1.0.1"
 retrofitVersion = "2.11.0"
-tiles = "1.4.1"
-tilesMaterial = "1.4.1"
+tiles = "1.5.0"
+tilesMaterial = "1.5.0"
 horologistComposeTools = "0.4.8"
 horologistTiles = "0.4.8"
 versionTrackerAndroidLibrary = "0.0.1"
@@ -43,11 +43,11 @@ watchfaceComplicationsDataSourceKtx = "1.2.1"
 
 googleServices = "4.4.2"
 firebaseDatabase = "21.0.0"
-workRuntime = "2.10.0"
-lifecycleRuntimeKtx = "2.7.0"
+workRuntime = "2.10.1"
+lifecycleRuntimeKtx = "2.9.1"
 aboutlibrariesCore = "11.2.3"
 splash-screen = "1.0.1"
-firebaseCrashlytics = "19.4.2"
+firebaseCrashlytics = "19.4.3"
 googleFirebaseCrashlytics = "3.0.3"
 
 [libraries]
@@ -105,7 +105,6 @@ hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hil
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 aboutlibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "aboutlibrariesCore" }
 aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "aboutlibrariesCore" }
-splash-screen = { module = "androidx.core:core-splashscreen", version.ref = "splash-screen" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 
 

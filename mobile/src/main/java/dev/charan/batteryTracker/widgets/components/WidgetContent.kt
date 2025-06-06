@@ -1,15 +1,17 @@
 package dev.charan.batteryTracker.widgets.components
 
-import android.util.Log
+
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceComposable
 import androidx.glance.GlanceModifier
+import androidx.glance.ImageProvider
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Column
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
+import dev.charan.batteryTracker.R
 import dev.charan.batteryTracker.data.model.BatteryInfo
 import dev.charan.batteryTracker.data.model.BluetoothDeviceBatteryInfo
 
@@ -18,17 +20,18 @@ import dev.charan.batteryTracker.data.model.BluetoothDeviceBatteryInfo
 fun WidgetContent(
     phoneBatteryState : BatteryInfo,
     bluetoothBatteryState : BluetoothDeviceBatteryInfo,
-    modifier : GlanceModifier = GlanceModifier
+    modifier : GlanceModifier = GlanceModifier,
+    isLargeWidget : Boolean
 ) {
 
         Column(
             modifier = GlanceModifier
-                .cornerRadius(25.dp)
+                    .cornerRadius(15.dp)
                 .fillMaxSize()
-                .padding(start = 8.dp, end = 8.dp, bottom = 5.dp, top = 15.dp)
+                .padding(start = 5.dp, end = 5.dp, bottom = 5.dp, top = 15.dp)
                 .then(modifier)
             ,
-            horizontalAlignment = Alignment.Horizontal.CenterHorizontally
+            horizontalAlignment = Alignment.Horizontal.CenterHorizontally,
         ) {
             DeviceBatteryView(
                 deviceName = phoneBatteryState.deviceName,
@@ -36,9 +39,10 @@ fun WidgetContent(
                 batteryPercentage = phoneBatteryState.batteryPercentage,
                 isCharging = phoneBatteryState.isCharging,
                 isLowPowerMode = phoneBatteryState.isLowPowerMode,
+                isLargeWidget = isLargeWidget,
+                deviceIcon = ImageProvider(R.drawable.mobile),
                 modifier = GlanceModifier.padding(bottom = 20.dp)
             )
-            Log.d("TAG", "WidgetContent: ${bluetoothBatteryState.isWearOsConnected}")
 
             if (bluetoothBatteryState.isWearOsConnected) {
                 DeviceBatteryView(
@@ -47,6 +51,8 @@ fun WidgetContent(
                     isCharging = bluetoothBatteryState.isWearOsCharging,
                     batteryPercentage = bluetoothBatteryState.wearOsBatteryPercentage,
                     isLowPowerMode = false,
+                    isLargeWidget = isLargeWidget,
+                    deviceIcon = ImageProvider(R.drawable.watch),
                     modifier = GlanceModifier.padding(bottom = 20.dp)
                 )
 
@@ -57,7 +63,9 @@ fun WidgetContent(
                     deviceBattery = bluetoothBatteryState.headPhoneBatteryLevel,
                     batteryPercentage = bluetoothBatteryState.headPhoneBatteryPercentage,
                     isCharging = false,
+                    isLargeWidget = isLargeWidget,
                     isLowPowerMode = false,
+                    deviceIcon = ImageProvider(R.drawable.headphones),
                     modifier = GlanceModifier
                 )
             }

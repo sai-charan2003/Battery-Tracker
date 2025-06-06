@@ -9,7 +9,6 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.glance.appwidget.updateAll
 import dev.charan.batteryTracker.widgets.Material3widget
-import dev.charan.batteryTracker.widgets.TransparentWidget
 import com.google.android.gms.tasks.Tasks
 import com.google.android.gms.wearable.Wearable
 import com.google.android.gms.wearable.WearableListenerService

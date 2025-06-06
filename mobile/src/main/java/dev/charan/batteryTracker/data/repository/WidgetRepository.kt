@@ -14,7 +14,6 @@ import dev.charan.batteryTracker.data.prefs.SharedPref
 import dev.charan.batteryTracker.utils.NotificationHelper
 import dev.charan.batteryTracker.utils.SettingsUtils
 import dev.charan.batteryTracker.widgets.Material3widget
-import dev.charan.batteryTracker.widgets.TransparentWidget
 import dev.charan.batteryTracker.widgets.WidgetState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -87,8 +86,7 @@ class WidgetRepository @Inject constructor(
         val manager = GlanceAppWidgetManager(context)
         val widgetIds = manager.getGlanceIds(Material3widget::class.java)
         widgetIds.forEach {
-            Material3widget.update(context, it)
-            TransparentWidget.update(context, it)
+            Material3widget().update(context, it)
         }
 
 

@@ -155,7 +155,7 @@ dependencies {
     implementation (libs.androidx.hilt.navigation.compose)
     implementation (libs.accompanist.permissions)
     implementation (libs.androidx.hilt.work)
-    implementation(libs.splash.screen)
+    implementation(libs.androidx.core.splashscreen)
     implementation(libs.kotlinx.serialization.json)
     implementation (libs.aboutlibraries.core)
     implementation(libs.aboutlibraries.compose.m3)
