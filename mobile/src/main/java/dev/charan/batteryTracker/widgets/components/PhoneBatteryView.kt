@@ -2,6 +2,8 @@ package dev.charan.batteryTracker.widgets.components
 
 import android.annotation.SuppressLint
 import androidx.compose.material.icons.Icons
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -28,6 +30,7 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import dev.charan.batteryTracker.R
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @SuppressLint("RestrictedApi")
 @Composable
 @GlanceComposable
@@ -61,19 +64,22 @@ fun DeviceBatteryView(
             modifier = GlanceModifier.size(26.dp).padding(end = 8.dp),
             colorFilter = ColorFilter.tint(GlanceTheme.colors.onSurface)
         )
-        if (isLargeWidget) {
+        if(isLargeWidget) {
             Text(
                 text = deviceName,
                 style = TextStyle(
                     color = GlanceTheme.colors.onSurface,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = MaterialTheme.typography.labelLargeEmphasized.fontSize
                 ),
-                modifier = GlanceModifier.defaultWeight()
+//                modifier = GlanceModifier.defaultWeight()
             )
         }
-        if(!isLargeWidget){
-            Spacer(modifier = GlanceModifier.defaultWeight())
-        }
+        Spacer(modifier = GlanceModifier.defaultWeight())
+//
+//        if(!isLargeWidget){
+//            Spacer(modifier = GlanceModifier.defaultWeight())
+//        }
 
 
         if (isCharging) {

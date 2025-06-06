@@ -121,11 +121,15 @@ class Material3widget: GlanceAppWidget() {
         ) {
             WidgetContent(
                 phoneBatteryState = batteryState?.deviceBattery ?: BatteryInfo(),
-                bluetoothBatteryState = bluetoothDeviceBatteryInfo
-                    ?: BluetoothDeviceBatteryInfo(),
+                bluetoothBatteryState = bluetoothDeviceBatteryInfo ?: BluetoothDeviceBatteryInfo(),
                 modifier = GlanceModifier.background(GlanceTheme.colors.surface),
-                isLargeWidget = size.width >= BIG_LAYOUT.width
+                isLargeWidget = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    size.width >= BIG_LAYOUT.width
+                } else {
+                    true
+                }
             )
+
 
 
         }
