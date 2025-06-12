@@ -106,10 +106,7 @@ class Material3widget: GlanceAppWidget() {
             Text(
                 text = "Battery Tracker",
                 modifier = GlanceModifier.padding(
-                    start = 10.dp,
-                    end = 10.dp,
-                    bottom = 15.dp,
-                    top = 15.dp
+                    10.dp
                 ),
                 style = TextStyle(
                     color = GlanceTheme.colors.onSurface,
