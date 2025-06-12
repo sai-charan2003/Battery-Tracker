@@ -26,7 +26,7 @@ fun WidgetContent(
 
         Column(
             modifier = GlanceModifier
-                    .cornerRadius(15.dp)
+                    .cornerRadius(12.dp)
                 .fillMaxSize()
                 .padding(start = 5.dp, end = 5.dp, bottom = 5.dp, top = 15.dp)
                 .then(modifier)

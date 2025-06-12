@@ -25,6 +25,7 @@ import androidx.glance.LocalSize
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
+import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.components.Scaffold
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
@@ -95,30 +96,26 @@ class Material3widget: GlanceAppWidget() {
         }
 
 
-        Scaffold(
-            titleBar = {
-                Text(
-                    text = "Battery Tracker",
-                    modifier = GlanceModifier.padding(
-                        start = 10.dp,
-                        end = 10.dp,
-                        bottom = 15.dp,
-                        top = 15.dp
-                    ),
-                    style = TextStyle(
-                        color = GlanceTheme.colors.onSurface,
-                        fontWeight = FontWeight.Bold,
-                    ),
-                )
-            },
-            horizontalPadding = 0.dp,
+        Column(
             modifier = GlanceModifier
-                .padding(start = 5.dp, end = 5.dp, bottom = 10.dp)
-                .cornerRadius(5.dp)
                 .fillMaxSize()
-
-
+                .background(GlanceTheme.colors.widgetBackground)
+                .padding(5.dp)
+                .cornerRadius(12.dp)
         ) {
+            Text(
+                text = "Battery Tracker",
+                modifier = GlanceModifier.padding(
+                    start = 10.dp,
+                    end = 10.dp,
+                    bottom = 15.dp,
+                    top = 15.dp
+                ),
+                style = TextStyle(
+                    color = GlanceTheme.colors.onSurface,
+                    fontWeight = FontWeight.Bold,
+                ),
+            )
             WidgetContent(
                 phoneBatteryState = batteryState?.deviceBattery ?: BatteryInfo(),
                 bluetoothBatteryState = bluetoothDeviceBatteryInfo ?: BluetoothDeviceBatteryInfo(),
