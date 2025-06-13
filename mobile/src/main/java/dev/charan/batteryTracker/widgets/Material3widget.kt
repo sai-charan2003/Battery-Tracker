@@ -49,6 +49,7 @@ import dev.charan.batteryTracker.data.repository.WidgetRepository
 import dev.charan.batteryTracker.data.model.BatteryInfo
 import dev.charan.batteryTracker.data.model.BluetoothDeviceBatteryInfo
 import dev.charan.batteryTracker.data.worker.BatteryWidgetUpdateWorker
+import dev.charan.batteryTracker.widgets.Material3widget.BIG_LAYOUT
 import dev.charan.batteryTracker.widgets.components.WidgetContent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -56,11 +57,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-class Material3widget: GlanceAppWidget() {
-    companion object {
+object Material3widget: GlanceAppWidget() {
+
         private val SMALL_LAYOUT = DpSize(150.dp, 100.dp)
-        private val BIG_LAYOUT = DpSize(250.dp, 250.dp)
-    }
+        internal val BIG_LAYOUT = DpSize(250.dp, 250.dp)
+
 
     override val sizeMode = SizeMode.Responsive(
         setOf(
@@ -77,64 +78,63 @@ class Material3widget: GlanceAppWidget() {
             }
         }
     }
+}
+@Composable
+fun Material3WidgetContent(
+    widgetRepository: WidgetRepository
+) {
+    val size = LocalSize.current
+    var batteryState by remember {
+        mutableStateOf(WidgetState())
+    }
+    val bluetoothDeviceBatteryInfo by widgetRepository.bluetoothBatteryData()
+        .collectAsState(BluetoothDeviceBatteryInfo())
+    LaunchedEffect(Unit) {
+        launch(Dispatchers.IO) {
+            batteryState = widgetRepository.allDevicesBatteryData()
 
-    @Composable
-    fun Material3WidgetContent(
-        widgetRepository: WidgetRepository
+        }
+    }
+
+
+    Column(
+        modifier = GlanceModifier
+            .fillMaxSize()
+            .background(GlanceTheme.colors.widgetBackground)
+            .padding(5.dp)
+            .cornerRadius(12.dp)
     ) {
-        val size = LocalSize.current
-        var batteryState by remember {
-            mutableStateOf(WidgetState())
-        }
-        val bluetoothDeviceBatteryInfo by widgetRepository.bluetoothBatteryData()
-            .collectAsState(BluetoothDeviceBatteryInfo())
-        LaunchedEffect(Unit) {
-            launch(Dispatchers.IO) {
-                batteryState = widgetRepository.allDevicesBatteryData()
-
+        Text(
+            text = "Battery Tracker",
+            modifier = GlanceModifier.padding(
+                10.dp
+            ),
+            style = TextStyle(
+                color = GlanceTheme.colors.onSurface,
+                fontWeight = FontWeight.Bold,
+            ),
+        )
+        WidgetContent(
+            phoneBatteryState = batteryState?.deviceBattery ?: BatteryInfo(),
+            bluetoothBatteryState = bluetoothDeviceBatteryInfo ?: BluetoothDeviceBatteryInfo(),
+            modifier = GlanceModifier.background(GlanceTheme.colors.surface),
+            isLargeWidget = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                size.width >= BIG_LAYOUT.width
+            } else {
+                true
             }
-        }
+        )
 
 
-        Column(
-            modifier = GlanceModifier
-                .fillMaxSize()
-                .background(GlanceTheme.colors.widgetBackground)
-                .padding(5.dp)
-                .cornerRadius(12.dp)
-        ) {
-            Text(
-                text = "Battery Tracker",
-                modifier = GlanceModifier.padding(
-                    10.dp
-                ),
-                style = TextStyle(
-                    color = GlanceTheme.colors.onSurface,
-                    fontWeight = FontWeight.Bold,
-                ),
-            )
-            WidgetContent(
-                phoneBatteryState = batteryState?.deviceBattery ?: BatteryInfo(),
-                bluetoothBatteryState = bluetoothDeviceBatteryInfo ?: BluetoothDeviceBatteryInfo(),
-                modifier = GlanceModifier.background(GlanceTheme.colors.surface),
-                isLargeWidget = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    size.width >= BIG_LAYOUT.width
-                } else {
-                    true
-                }
-            )
-
-
-
-        }
 
     }
+
 }
 
     @AndroidEntryPoint
     class Material3WidgetReceiver : GlanceAppWidgetReceiver() {
         override val glanceAppWidget: GlanceAppWidget
-            get() = Material3widget()
+            get() = Material3widget
 
 
 //        override fun onDisabled(context: Context?) {

@@ -86,7 +86,7 @@ class WidgetRepository @Inject constructor(
         val manager = GlanceAppWidgetManager(context)
         val widgetIds = manager.getGlanceIds(Material3widget::class.java)
         widgetIds.forEach {
-            Material3widget().update(context, it)
+            Material3widget.update(context, it)
         }
 
 
