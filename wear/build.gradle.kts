@@ -17,8 +17,8 @@ android {
         applicationId = "dev.charan.batteryTracker"
         minSdk = 26
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.4"
+        versionCode = 5
+        versionName = "1.5"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -27,7 +27,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
