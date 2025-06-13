@@ -2,6 +2,7 @@ package dev.charan.batteryTracker.presentation.settings
 
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.charan.batteryTracker.data.prefs.SharedPref
@@ -10,8 +11,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 import androidx.lifecycle.viewModelScope
+import dev.charan.batteryTracker.data.repository.WidgetRepository
 import dev.charan.batteryTracker.utils.AppConstants
 import dev.charan.batteryTracker.utils.SettingsUtils
+import dev.charan.batteryTracker.widgets.Material3widget
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -20,7 +24,8 @@ import kotlin.math.roundToInt
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val sharedPref: SharedPref,
-    private val settingsUtils: SettingsUtils
+    private val settingsUtils: SettingsUtils,
+    private val widgetRepository: WidgetRepository
 ): ViewModel() {
 
     private val _state = MutableStateFlow(SettingsState())
@@ -104,8 +109,9 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private fun phoneNameSubmit() {
+    private fun phoneNameSubmit() = viewModelScope.launch(Dispatchers.IO){
         sharedPref.deviceName = _state.value.phoneName
+        widgetRepository.updateWidget()
     }
 
     private fun changeMinHeadphoneBatteryLevel(value : Float) {

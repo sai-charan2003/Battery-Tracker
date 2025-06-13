@@ -3,6 +3,7 @@ package dev.charan.batteryTracker.data.repository
 import android.content.Context
 import android.util.Log
 import androidx.glance.appwidget.GlanceAppWidgetManager
+import androidx.glance.appwidget.updateAll
 import dagger.hilt.EntryPoint
 import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn
@@ -83,11 +84,7 @@ class WidgetRepository @Inject constructor(
     }
 
     suspend fun updateWidget() {
-        val manager = GlanceAppWidgetManager(context)
-        val widgetIds = manager.getGlanceIds(Material3widget::class.java)
-        widgetIds.forEach {
-            Material3widget.update(context, it)
-        }
+        Material3widget.updateAll(context)
 
 
     }
